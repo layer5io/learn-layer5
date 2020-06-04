@@ -2,12 +2,14 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
+
+	logrus "github.com/sirupsen/logrus"
 )
 
 var requestsReceived int
@@ -31,6 +33,7 @@ func MetricsMiddleware(next http.Handler) http.Handler {
 func call(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		http.Error(w, "Method not defined", http.StatusBadRequest)
+		logrus.Errorf("Method not defined")
 		return
 	}
 
@@ -40,8 +43,10 @@ func call(w http.ResponseWriter, req *http.Request) {
 	bytes, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		http.Error(w, "Error reading body", http.StatusBadRequest)
+		logrus.Errorf("Error reading body: %s", err.Error())
 		return
 	}
+	logrus.Debugf("request body: %v", string(bytes))
 
 	if string(bytes) == "" {
 		return
@@ -50,6 +55,7 @@ func call(w http.ResponseWriter, req *http.Request) {
 	err = json.Unmarshal(bytes, &data)
 	if err != nil {
 		http.Error(w, "Error parsing body", http.StatusBadRequest)
+		logrus.Errorf("Error parsing body: %s", err.Error())
 		return
 	}
 
@@ -66,9 +72,11 @@ func call(w http.ResponseWriter, req *http.Request) {
 	} else {
 		resp, err = http.Get(host)
 	}
+
+	logrus.Debugf("Call response: %v", resp)
 	if err != nil {
-		fmt.Printf("%v", err)
-		http.Error(w, "Error parsing response body", http.StatusBadRequest)
+		http.Error(w, "Error making the calling", http.StatusBadRequest)
+		logrus.Errorf("Error making the calling: %s", err.Error())
 		return
 	}
 
@@ -81,8 +89,10 @@ func call(w http.ResponseWriter, req *http.Request) {
 
 	bytes, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
+		logrus.Errorf("Error parsing body: %s", err.Error())
 		return
 	}
+	logrus.Debugf("Response body: %s", string(bytes))
 	w.Write(bytes)
 }
 
@@ -108,6 +118,8 @@ func refreshMetrics(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	logrus.SetOutput(os.Stdout)
+
 	mux := http.NewServeMux()
 	mux.Handle("/call", MetricsMiddleware(http.HandlerFunc(call)))
 	mux.Handle("/metrics/get", http.HandlerFunc(getMetrics))
