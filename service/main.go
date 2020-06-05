@@ -96,25 +96,23 @@ func call(w http.ResponseWriter, req *http.Request) {
 	w.Write(bytes)
 }
 
-func getMetrics(w http.ResponseWriter, req *http.Request) {
-	if req.Method != http.MethodGet {
+func metrics(w http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodGet {
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(map[string]string{
+			"responsesSucceeded": strconv.Itoa(responsesSucceeded),
+			"responsesFailed":    strconv.Itoa(responsesFailed),
+			"requestsReceived":   strconv.Itoa(requestsReceived),
+		}); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	} else if req.Method == http.MethodDelete {
+		responsesSucceeded = 0
+		responsesFailed = 0
+		requestsReceived = 0
+	} else {
 		http.Error(w, "Method not defined", http.StatusBadRequest)
-		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(map[string]string{
-		"responsesSucceeded": strconv.Itoa(responsesSucceeded),
-		"responsesFailed":    strconv.Itoa(responsesFailed),
-		"requestsReceived":   strconv.Itoa(requestsReceived),
-	}); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-}
-
-func refreshMetrics(w http.ResponseWriter, req *http.Request) {
-	responsesSucceeded = 0
-	responsesFailed = 0
-	requestsReceived = 0
 }
 
 func main() {
@@ -122,7 +120,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/call", MetricsMiddleware(http.HandlerFunc(call)))
-	mux.Handle("/metrics/get", http.HandlerFunc(getMetrics))
-	mux.Handle("/metrics/refresh", http.HandlerFunc(refreshMetrics))
+	mux.Handle("/metrics", http.HandlerFunc(metrics))
 	http.ListenAndServe(":9091", mux)
 }
