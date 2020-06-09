@@ -1,5 +1,13 @@
 # learn-layer5
 
+# To check for smi conformance of a deployed service mesh
+We use kuttl to check for SMI conformance. All the tests are writtten in smi-test directory of this repository.
+Execute the following command to run the smi-conformace tests:-
+
+```shell
+kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
+```
+
 ## Service
 
 The following are the routes defined by the `service` app and their functionality.
