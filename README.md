@@ -14,10 +14,11 @@
 
 <p style="clear:both;">
 <h2>Learn Layer5</h2>
+
 The Learn Layer5 sample application is used as:
 
 - a learning device
-- for Service Mesh Interface conformance
+- for [Service Mesh Interface conformance](https://docs.google.com/document/d/1HL8Sk7NSLLj-9PRqoHYVIGyU6fZxUQFotrxbmfFtjwc/edit#)
 
 ## Service
 
