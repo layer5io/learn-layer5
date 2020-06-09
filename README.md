@@ -17,14 +17,17 @@
 
 The Learn Layer5 sample application is used as:
 
-- a learning device (for [service mesh workshops](https://layer5.io/workshops)
+- a learning device (for [service mesh workshops](https://layer5.io/workshops))
 - for [Service Mesh Interface conformance](https://docs.google.com/document/d/1HL8Sk7NSLLj-9PRqoHYVIGyU6fZxUQFotrxbmfFtjwc/edit#)
 
-## Service
+## Application Architecture
+The Learn Layer5 application includes three services: `app-a`, `app-b`, and `app-c`. Each service is listening on port `9091/tcp`.
+
+### Service
 
 The following are the routes defined by the `service` app and their functionality.
 
-##### POST /call
+#### POST /call
 
 This is the route whose metrics will be collected by the app. This route can be used to make the service call any other web service.
 
@@ -87,7 +90,7 @@ curl --location --request POST 'http://localhost:9091/call' \
 }
 ```
 
-##### GET /metrics
+#### GET /metrics
 
 Gets the metrics from `service`
 ```shell
@@ -105,7 +108,7 @@ curl --location --request GET 'localhost:9091/metrics' \
 }
 ```
 
-##### DELETE /metrics
+#### DELETE /metrics
 
 Clears the counters in `service`
 ```shell
