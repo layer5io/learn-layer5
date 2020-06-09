@@ -17,7 +17,7 @@
 
 The Learn Layer5 sample application is used as:
 
-- a learning device
+- a learning device (for [service mesh workshops](https://layer5.io/workshops)
 - for [Service Mesh Interface conformance](https://docs.google.com/document/d/1HL8Sk7NSLLj-9PRqoHYVIGyU6fZxUQFotrxbmfFtjwc/edit#)
 
 ## Service
