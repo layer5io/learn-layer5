@@ -127,6 +127,10 @@ func call(w http.ResponseWriter, r *http.Request) {
 	w.Write(bytes)
 }
 
+func echo(w http.ResponseWriter, req *http.Request) {
+	req.Write(w)
+}
+
 func metrics(w http.ResponseWriter, req *http.Request) {
 	if req.Method == http.MethodGet {
 		w.Header().Set("Content-Type", "application/json")
@@ -150,6 +154,7 @@ func metrics(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	logrus.SetOutput(os.Stdout)
+	logrus.SetLevel(logrus.DebugLevel)
 
 	serviceName = os.Getenv("SERVICE_NAME")
 	if serviceName == "" {
@@ -166,9 +171,10 @@ func main() {
 	requestsReceived = []string{}
 
 	mux := http.NewServeMux()
+
 	mux.Handle("/call", MetricsMiddleware(http.HandlerFunc(call)))
 	mux.Handle("/metrics", http.HandlerFunc(metrics))
-	logrus.Debugf("Started serving at: 9091")
-	println("Started serving at: " + port)
+	mux.Handle("/echo", http.HandlerFunc(echo))
+	logrus.Infof("Started serving at: %s", port)
 	http.ListenAndServe(":"+port, mux)
 }
