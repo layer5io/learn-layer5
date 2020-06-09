@@ -11,9 +11,20 @@ import (
 	logrus "github.com/sirupsen/logrus"
 )
 
-var requestsReceived []string
-var responsesSucceeded []string
-var responsesFailed []string
+type MetricsResponse struct {
+	URL     string
+	Method  string
+	Headers map[string]interface{}
+}
+
+type Metrics struct {
+	ReqReceived   []string
+	RespSucceeded []MetricsResponse
+	RespFailed    []MetricsResponse
+}
+
+var metricsObj Metrics
+
 var mutex sync.Mutex
 
 func execExclusive(fn func()) {
@@ -23,6 +34,7 @@ func execExclusive(fn func()) {
 }
 
 const serviceID = "ServiceName"
+const defaultRequestID = "Default"
 
 var serviceName string
 
@@ -33,7 +45,7 @@ func MetricsMiddleware(next http.Handler) http.Handler {
 			if svcName == "" {
 				svcName = "Unidentified"
 			}
-			requestsReceived = append(requestsReceived, svcName)
+			metricsObj.ReqReceived = append(metricsObj.ReqReceived, svcName)
 		})
 		next.ServeHTTP(w, r)
 	})
@@ -76,12 +88,15 @@ func call(w http.ResponseWriter, r *http.Request) {
 		req, err = http.NewRequest(method, url, strings.NewReader(body))
 		if err != nil {
 			logrus.Errorf("Error creating request %s", err.Error())
-			// TODO err handling
+			http.Error(w, "Error creating request", http.StatusBadRequest)
+			return
 		}
 	} else {
 		req, err = http.NewRequest(method, url, nil)
 		if err != nil {
 			logrus.Errorf("Error creating request %s", err.Error())
+			http.Error(w, "Error creating request", http.StatusBadRequest)
+			return
 		}
 	}
 
@@ -98,6 +113,8 @@ func call(w http.ResponseWriter, r *http.Request) {
 	resp, err := client.Do(req)
 	if err != nil {
 		logrus.Errorf("Error completing the request %s", err.Error())
+		http.Error(w, "Error completing the request", http.StatusInternalServerError)
+		return
 	}
 
 	logrus.Debugf("Call response: %v", resp)
@@ -110,11 +127,35 @@ func call(w http.ResponseWriter, r *http.Request) {
 	if resp.StatusCode >= 200 && resp.StatusCode < 400 {
 		w.WriteHeader(http.StatusOK)
 		execExclusive(func() {
-			responsesSucceeded = append(responsesSucceeded, url)
+			if headers != nil {
+				headers := headers.(map[string]interface{})
+				metricsObj.RespSucceeded = append(metricsObj.RespSucceeded, MetricsResponse{
+					URL:     url,
+					Method:  method,
+					Headers: headers,
+				})
+			} else {
+				metricsObj.RespSucceeded = append(metricsObj.RespSucceeded, MetricsResponse{
+					URL:    url,
+					Method: method,
+				})
+			}
 		})
 	} else {
 		execExclusive(func() {
-			responsesFailed = append(responsesFailed, url)
+			if headers != nil {
+				headers := headers.(map[string]interface{})
+				metricsObj.RespFailed = append(metricsObj.RespFailed, MetricsResponse{
+					URL:     url,
+					Method:  method,
+					Headers: headers,
+				})
+			} else {
+				metricsObj.RespFailed = append(metricsObj.RespFailed, MetricsResponse{
+					URL:    url,
+					Method: method,
+				})
+			}
 		})
 	}
 
@@ -134,18 +175,18 @@ func echo(w http.ResponseWriter, req *http.Request) {
 func metrics(w http.ResponseWriter, req *http.Request) {
 	if req.Method == http.MethodGet {
 		w.Header().Set("Content-Type", "application/json")
-		if err := json.NewEncoder(w).Encode(map[string][]string{
-			"responsesSucceeded": responsesSucceeded,
-			"responsesFailed":    responsesFailed,
-			"requestsReceived":   requestsReceived,
-		}); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-		}
+		execExclusive(func() {
+			if err := json.NewEncoder(w).Encode(&metricsObj); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+			}
+		})
 	} else if req.Method == http.MethodDelete {
 		execExclusive(func() {
-			responsesSucceeded = []string{}
-			responsesFailed = []string{}
-			requestsReceived = []string{}
+			metricsObj = Metrics{
+				RespSucceeded: []MetricsResponse{},
+				RespFailed:    []MetricsResponse{},
+				ReqReceived:   []string{},
+			}
 		})
 	} else {
 		http.Error(w, "Method not defined", http.StatusBadRequest)
@@ -166,15 +207,17 @@ func main() {
 		port = "9091"
 	}
 
-	responsesSucceeded = []string{}
-	responsesFailed = []string{}
-	requestsReceived = []string{}
+	metricsObj = Metrics{
+		RespSucceeded: []MetricsResponse{},
+		RespFailed:    []MetricsResponse{},
+		ReqReceived:   []string{},
+	}
 
 	mux := http.NewServeMux()
 
 	mux.Handle("/call", MetricsMiddleware(http.HandlerFunc(call)))
 	mux.Handle("/metrics", http.HandlerFunc(metrics))
-	mux.Handle("/echo", http.HandlerFunc(echo))
+	mux.Handle("/echo", MetricsMiddleware(http.HandlerFunc(echo)))
 	logrus.Infof("Started serving at: %s", port)
 	http.ListenAndServe(":"+port, mux)
 }
