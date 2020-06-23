@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
       - name: app-a
-        image: layer5/sample-app-service:dev
-        imagePullPolicy: Never
+        image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
 ---
@@ -39,8 +38,7 @@ spec:
     spec:
       containers:
       - name: app-b
-        image: layer5/sample-app-service:dev
-        imagePullPolicy: Never
+        image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
 ---
@@ -62,8 +60,7 @@ spec:
     spec:
       containers:
       - name: app-c
-        image: layer5/sample-app-service:dev
-        imagePullPolicy: Never
+        image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
 ---
@@ -72,39 +69,39 @@ kind: Service
 metadata:
   name: service-a
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: app-a
   ports:
   - name: http
     protocol: TCP
     port: 9091
-    targetPort: 9091
+    # targetPort: 9091
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: service-b
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: app-b
   ports:
   - name: http
     protocol: TCP
     port: 9091
-    targetPort: 9091
+    # targetPort: 9091
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: service-c
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: app-c
   ports:
   - name: http
     protocol: TCP
     port: 9091
-    targetPort: 9091
+    # targetPort: 9091
