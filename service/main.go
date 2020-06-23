@@ -107,8 +107,8 @@ func call(w http.ResponseWriter, r *http.Request) {
 		for key, val := range headers {
 			req.Header.Add(key, val.(string))
 		}
-		req.Header.Add(serviceID, serviceName)
 	}
+	req.Header.Add(serviceID, serviceName)
 
 	resp, err := client.Do(req)
 	if err != nil {
