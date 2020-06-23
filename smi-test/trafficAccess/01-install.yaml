@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,9 +12,14 @@ spec:
       app: app-a
   template:
     metadata:
+      # annotations:
+      #   'consul.hashicorp.com/connect-inject': 'true'
       labels:
         app: app-a
+    
     spec:
+      # serviceAccountName: service-a
+      # automountServiceAccountToken: true
       containers:
       - name: app-a
         image: layer5/sample-app-service:dev
@@ -36,7 +42,11 @@ spec:
     metadata:
       labels:
         app: app-b
+      # annotations:
+      #   'consul.hashicorp.com/connect-inject': 'true'
     spec:
+      # serviceAccountName: service-b
+      # automountServiceAccountToken: true
       containers:
       - name: app-b
         image: layer5/sample-app-service:dev
@@ -59,7 +69,11 @@ spec:
     metadata:
       labels:
         app: app-c
+      # annotations:
+      #   'consul.hashicorp.com/connect-inject': 'true'
     spec:
+      # serviceAccountName: service-c
+      # automountServiceAccountToken: true
       containers:
       - name: app-c
         image: layer5/sample-app-service:dev
@@ -86,7 +100,7 @@ kind: Service
 metadata:
   name: service-b
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: app-b
   ports:
@@ -100,7 +114,7 @@ kind: Service
 metadata:
   name: service-c
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: app-c
   ports:
