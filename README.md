@@ -1,3 +1,11 @@
+# To check for smi conformance of a deployed service mesh
+We use kuttl to check for SMI conformance. All the tests are writtten in smi-test directory of this repository.
+Execute the following command to run the smi-conformace tests:-
+
+```shell
+kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
+```
+
 <p style="text-align:center;" align="center">
   <img align="center" src="https://raw.githubusercontent.com/layer5io/layer5/master/assets/images/layer5/layer5-tag-white-bg.png" width="45%" /></p>
 

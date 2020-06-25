@@ -11,6 +11,8 @@ spec:
       app: app-a
   template:
     metadata:
+      # annotations:
+      #   'consul.hashicorp.com/connect-inject': 'true'
       labels:
         app: app-a
     spec:
@@ -39,6 +41,8 @@ spec:
       app: app-b
   template:
     metadata:
+      # annotations:
+      #   'consul.hashicorp.com/connect-inject': 'true'
       labels:
         app: app-b
     spec:
@@ -67,6 +71,8 @@ spec:
       app: app-c
   template:
     metadata:
+      # annotations:
+      #   'consul.hashicorp.com/connect-inject': 'true'
       labels:
         app: app-c
     spec:
@@ -101,7 +107,7 @@ kind: Service
 metadata:
   name: service-b
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: app-b
   ports:
@@ -115,7 +121,7 @@ kind: Service
 metadata:
   name: service-c
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: app-c
   ports:
