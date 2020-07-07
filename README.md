@@ -28,7 +28,7 @@ The Learn Layer5 sample application is to be available for use across all servic
 - for [Service Mesh Interface conformance](https://docs.google.com/document/d/1HL8Sk7NSLLj-9PRqoHYVIGyU6fZxUQFotrxbmfFtjwc/edit#)
 
 ## Application Architecture
-The Learn Layer5 application includes three services: `app-a`, `app-b`, and `app-c`. Each service is listening on port `9091/tcp`.
+The Learn Layer5 application includes three services: `app-a`, `app-b`, and `app-c`. Though they are different services, they are defines using the same app (source code in ./service). Each service is listening on port `9091/tcp`.
 
 ### Service
 
@@ -36,97 +36,85 @@ The following are the routes defined by the `service` app and their functionalit
 
 #### POST /call
 
-This is the route whose metrics will be collected by the app. This route can be used to make the service call any other web service.
+This route makes the service make requests to another service. Metrics are collected for this route. sample usage given below:
 
-Simple POST request
+
 ```shell
 # Command
-curl --location --request POST 'http://localhost:9091/call' \
---data-raw ''
+curl --location --request POST 'http://service-a:9091/call' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"url": "http://service-b:9091/call",
+"body": "{\r\n\"url\": \"http:\/\/service-c:9091\/echo\",\r\n\"body\": \"\",\r\n\"method\": \"GET\"\r\n}",
+"method": "POST",
+"headers": {
+    "h1":"v1"
+}
+}'
+
 # No Output
+GET /echo HTTP/1.1
+Host: service-c:9091
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+Servicename: Service-B
 ```
 
-`service` makes a POST request to `"http://httpbin.org/post"`.
-```shell
-# Command
-curl --location --request POST 'http://localhost:9091/call' \
---header 'Content-Type: application/json' \
---data-raw '{
-"host": "http://httpbin.org/post",
-"body": "{\n\t\"hello\": \"bye\"\n}"
-}'
-# Output
+In the above example, we are making a post request from `service-a` with the body:
+```json
 {
-  "args": {}, 
-  "data": "{\n\t\"hello\": \"bye\"\n}", 
-  "files": {}, 
-  "form": {}, 
+  "url": "http://service-b:9091/call",
+  "body": "{\r\n\"url\": \"http:\/\/service-c:9091\/echo\",\r\n\"body\": \"\",\r\n\"method\": \"GET\"\r\n}",
+  "method": "POST",
   "headers": {
-    "Accept-Encoding": "gzip", 
-    "Content-Length": "19", 
-    "Content-Type": "application/json", 
-    "Host": "httpbin.org", 
-    "User-Agent": "Go-http-client/1.1", 
-  }, 
-  "json": {
-    "hello": "bye"
-  }, 
-  "origin": "...", 
-  "url": "http://httpbin.org/post"
+      "h1":"v1"
+  }
 }
 ```
-
-`service` makes a get request (as body is not provided) to `http://httpbin.org/get`.
-```shell
-# Command
-curl --location --request POST 'http://localhost:9091/call' \
---header 'Content-Type: application/json' \
---data-raw '{
-"host": "http://httpbin.org/get",
-}'
-# Output
+This will make `service-a` to make a `POST` request to `http://service-b:9091/call` with the headers specified above, and the body:
+```json
 {
-  "args": {}, 
-  "headers": {
-    "Accept-Encoding": "gzip", 
-    "Host": "httpbin.org", 
-    "User-Agent": "Go-http-client/1.1", 
-  }, 
-  "origin": "...", 
-  "url": "http://httpbin.org/get"
+  "url": "http://service-c:9091/echo",
+  "body":"",
+  "method": "GET"
 }
 ```
+This inturn will make `service-b` to make a `GET` request to `http://service-c:9091/echo`.
 
 #### GET /metrics
 
-Gets the metrics from `service`
+Gets the metrics from `service-a`
 ```shell
 # Command
-curl --location --request GET 'localhost:9091/metrics' \
---header 'Content-Type: application/json' \
---data-raw '{
-"hello": "bye"
-}'
+curl --location --request GET 'http://service-b:9091/metrics'
 # Output
 {
-    "requestsReceived": "19", # Total requests service recieved
-    "responsesFailed": "3",   # The responses of the requests the service made that failed
-    "responsesSucceeded": "7" # The responses of the requests the service made that succeeded
+    "ReqReceived": [
+        "Service-A"
+    ],
+    "RespSucceeded": [
+        {
+            "URL": "http://service-c:9091/echo",
+            "Method": "GET",
+            "Headers": null
+        }
+    ],
+    "RespFailed": []
 }
 ```
+* In ReqReceived we see list of requests `service-b` received and from whom it received. Here we see `service-A`. Actually each of the service sets a header `ServiceName` which is read  by the service to determine the sender. 
+* As `service-b` made a request to `service-c` and the request succeeded, we can see the details in the list of successful responses (RespSucceeded).
 
 #### DELETE /metrics
 
 Clears the counters in `service`
 ```shell
 # Command
-curl --location --request DELETE 'localhost:9091/metrics' \
---header 'Content-Type: application/json' \
---data-raw '{
-	"hello": "bye"
-}'
+curl --location --request DELETE 'http://34.68.35.174:9091/metrics'
 # No Output
 ```
+
+> Note: metrics are collected only for `/call` and `/echo`.
 
 <br /><br /><p align="center"><i>If you’re using Learn Layer5 or if you like the project, please <a href="https://github.com/layer5io/meshery/stargazers">★</a> star this repository to show your support! 🤩</i></p>
 </p>
