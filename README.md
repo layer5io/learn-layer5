@@ -1,10 +1,3 @@
-# To check for smi conformance of a deployed service mesh
-We use kuttl to check for SMI conformance. All the tests are writtten in smi-test directory of this repository.
-Execute the following command to run the smi-conformace tests:-
-
-```shell
-kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
-```
 
 <p style="text-align:center;" align="center">
   <img align="center" src="https://raw.githubusercontent.com/layer5io/layer5/master/assets/images/layer5/layer5-tag-white-bg.png" width="45%" /></p>
@@ -115,6 +108,20 @@ curl --location --request DELETE 'http://34.68.35.174:9091/metrics'
 ```
 
 > Note: metrics are collected only for `/call` and `/echo`.
+
+# Service Mesh Interface (SMI) Conformance
+The `learn-layer5` application serves as a sample application to validate the conformance of any service mesh with the SMI specifications. To verfiy SMI conformance, run Meshery and invoke the suite of SMI tests specific to the service mesh you would like to validate.
+
+## Testing with Meshery
+Meshery allows you to sechedule tests and invoke them programmatically. Meshery will store these test results and allow you to retrieve them later.
+
+## Testing Manually
+
+To manually invoke SMI Conformance test for a deployed service mesh, you can apply tests from the `smi-test` directory of this repository. Execute the following command to run the smi-conformace tests:
+
+```shell
+kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
+```
 
 <br /><br /><p align="center"><i>If you’re using Learn Layer5 or if you like the project, please <a href="https://github.com/layer5io/meshery/stargazers">★</a> star this repository to show your support! 🤩</i></p>
 </p>
