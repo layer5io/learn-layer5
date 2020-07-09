@@ -13,7 +13,8 @@
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3564/badge)](https://bestpractices.coreinfrastructure.org/projects/3564)
 
 <p style="clear:both;">
-<h2>Learn Layer5</h2>
+
+# Learn Layer5
 
 The Learn Layer5 sample application is to be available for use across all service meshes that Meshery supports and is to used as:
 
