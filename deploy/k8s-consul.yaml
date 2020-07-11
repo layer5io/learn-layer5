@@ -1,0 +1,153 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-a
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-b
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-c
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-a-deployment
+  labels:
+    app: service-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-a
+  template:
+    metadata:
+      name: service-a
+      labels:
+        app: service-a
+      annotations:
+        'consul.hashicorp.com/connect-inject': 'true'
+        'consul.hashicorp.com/connect-service-upstreams': 'service-b:9092'
+    spec:
+      serviceAccountName: service-a
+      automountServiceAccountToken: true
+      containers:
+      - name: service-a
+        image: layer5/learn-layer5:latest
+        ports:
+        - containerPort: 9091
+          name: http
+        env:
+        - name: SERVICE_NAME
+          value: "Service-a"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-b-deployment
+  labels:
+    app: service-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-b
+  template:
+    metadata:
+      name: service-b
+      annotations:
+        'consul.hashicorp.com/connect-inject': 'true'
+        "consul.hashicorp.com/connect-service": "service-b"
+      labels:
+        app: service-b
+    spec:
+      serviceAccountName: service-b
+      automountServiceAccountToken: true
+      containers:
+      - name: service-b
+        image: layer5/learn-layer5:latest
+        ports:
+        - containerPort: 9091
+        env:
+        - name: SERVICE_NAME
+          value: "Service-b"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-c-deployment
+  labels:
+    app: service-c
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-c
+  template:
+    metadata:
+      name: service-c
+      annotations:
+        'consul.hashicorp.com/connect-inject': 'true'
+        "consul.hashicorp.com/connect-service": "service-c"
+      labels:
+        app: service-c
+    spec:
+      serviceAccountName: service-c
+      automountServiceAccountToken: true
+      containers:
+      - name: service-c
+        image: layer5/learn-layer5:latest
+        ports:
+        - containerPort: 9091
+        env:
+        - name: SERVICE_NAME
+          value: "Service-c"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-a
+spec:
+  type: LoadBalancer
+  selector:
+    app: app-a
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    # targetPort: 9091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-b
+spec:
+  type: LoadBalancer
+  selector:
+    app: app-b
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    # targetPort: 9091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-c
+spec:
+  type: LoadBalancer
+  selector:
+    app: app-c
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    # targetPort: 9091

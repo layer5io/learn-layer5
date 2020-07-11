@@ -1,0 +1,22 @@
+---
+apiVersion: specs.smi-spec.io/v1alpha1
+kind: TCPRoute
+metadata:
+  name: service-tcp-route
+---
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha1
+metadata:
+  name: service-targets
+  namespace: default
+destination:
+  kind: ServiceAccount
+  name: service-b
+  namespace: default
+sources:
+- kind: ServiceAccount
+  name: service-a
+  namespace: default
+specs:
+- kind: TCPRoute
+  name: service-tcp-route

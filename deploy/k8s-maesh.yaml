@@ -1,7 +1,22 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-a
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-b
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-c
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-a
+  name: app-a-deployment
   labels:
     app: app-a
 spec:
@@ -14,19 +29,21 @@ spec:
       labels:
         app: app-a
     spec:
+      serviceAccountName: service-a
       containers:
       - name: app-a
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
+          name: http
         env:
         - name: SERVICE_NAME
-          value: "Service-A"
+          value: "Service-a"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-b
+  name: app-b-deployment
   labels:
     app: app-b
 spec:
@@ -39,19 +56,21 @@ spec:
       labels:
         app: app-b
     spec:
+      serviceAccountName: service-b
       containers:
       - name: app-b
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
+          name: http
         env:
         - name: SERVICE_NAME
-          value: "Service-B"
+          value: "Service-b"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-c
+  name: app-c-deployment
   labels:
     app: app-c
 spec:
@@ -64,19 +83,21 @@ spec:
       labels:
         app: app-c
     spec:
+      serviceAccountName: service-c
       containers:
       - name: app-c
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
+          name: http
         env:
         - name: SERVICE_NAME
-          value: "Service-C"
+          value: "Service-c"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-a
+  name: app-a
 spec:
   type: LoadBalancer
   selector:
@@ -90,7 +111,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-b
+  name: app-b
 spec:
   type: LoadBalancer
   selector:
@@ -104,7 +125,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-c
+  name: app-c
 spec:
   type: LoadBalancer
   selector:
