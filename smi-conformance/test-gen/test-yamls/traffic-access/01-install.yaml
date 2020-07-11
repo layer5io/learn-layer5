@@ -106,7 +106,7 @@ spec:
   - name: http
     protocol: TCP
     port: 9091
-    # targetPort: 9091
+    targetPort: 9091
 ---
 apiVersion: v1
 kind: Service
@@ -120,7 +120,7 @@ spec:
   - name: http
     protocol: TCP
     port: 9091
-    # targetPort: 9091
+    targetPort: 9091
 ---
 apiVersion: v1
 kind: Service
@@ -134,4 +134,4 @@ spec:
   - name: http
     protocol: TCP
     port: 9091
-    # targetPort: 9091
+    targetPort: 9091
