@@ -7,9 +7,9 @@ type ServiceMesh interface {
 	SvcBGetInternalName() string
 	SvcCGetInternalName() string
 
-	SvcAGetExternalName() string
-	SvcBGetExternalName() string
-	SvcCGetExternalName() string
+	SvcAGetPort() string
+	SvcBGetPort() string
+	SvcCGetPort() string
 }
 
 type Maesh struct {
@@ -31,14 +31,14 @@ func (sm Maesh) SvcCGetInternalName() string {
 	return fmt.Sprintf("http://%s.%s.maesh:%s/", SERVICE_C_NAME, sm.Namespace, sm.PortSvcC)
 }
 
-func (sm Maesh) SvcAGetExternalName() string {
-	return fmt.Sprintf("http://%s:%s/", SERVICE_A_NAME, sm.PortSvcA)
+func (sm Maesh) SvcAGetPort() string {
+	return sm.PortSvcA
 }
 
-func (sm Maesh) SvcBGetExternalName() string {
-	return fmt.Sprintf("http://%s:%s/", SERVICE_B_NAME, sm.PortSvcB)
+func (sm Maesh) SvcBGetPort() string {
+	return sm.PortSvcB
 }
 
-func (sm Maesh) SvcCGetExternalName() string {
-	return fmt.Sprintf("http://%s:%s/", SERVICE_C_NAME, sm.PortSvcC)
+func (sm Maesh) SvcCGetPort() string {
+	return sm.PortSvcC
 }
