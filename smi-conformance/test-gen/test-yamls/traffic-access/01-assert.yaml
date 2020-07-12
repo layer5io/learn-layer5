@@ -17,89 +17,29 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-a-deployment
-  labels:
-    app: app-a
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: app-a
-  template:
-    metadata:
-      labels:
-        app: app-a
-    spec:
-      serviceAccountName: service-a
-      containers:
-      - name: app-a
-        image: layer5/learn-layer5:latest
-        ports:
-        - containerPort: 9091
-          name: http
-        env:
-        - name: SERVICE_NAME
-          value: "Service-a"
+status:
+  readyReplicas: 1
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-b-deployment
-  labels:
-    app: app-b
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: app-b
-  template:
-    metadata:
-      labels:
-        app: app-b
-    spec:
-      serviceAccountName: service-b
-      containers:
-      - name: app-b
-        image: layer5/learn-layer5:latest
-        ports:
-        - containerPort: 9091
-          name: http
-        env:
-        - name: SERVICE_NAME
-          value: "Service-b"
+status:
+  readyReplicas: 1
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-c-deployment
-  labels:
-    app: app-c
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: app-c
-  template:
-    metadata:
-      labels:
-        app: app-c
-    spec:
-      serviceAccountName: service-c
-      containers:
-      - name: app-c
-        image: layer5/learn-layer5:latest
-        ports:
-        - containerPort: 9091
-          name: http
-        env:
-        - name: SERVICE_NAME
-          value: "Service-c"
+status:
+  readyReplicas: 1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: app-a
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: app-a
   ports:
@@ -113,7 +53,7 @@ kind: Service
 metadata:
   name: app-b
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: app-b
   ports:
@@ -127,7 +67,7 @@ kind: Service
 metadata:
   name: app-c
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: app-c
   ports:

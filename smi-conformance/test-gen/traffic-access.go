@@ -5,6 +5,7 @@ import (
 	"context"
 	"io/ioutil"
 	"net/http"
+	"time"
 	"testing"
 
 	"github.com/kudobuilder/kuttl/pkg/test"
@@ -34,6 +35,10 @@ func (smi *SMIConformance) traffic(
 	DiscoveryClient func() (discovery.DiscoveryInterface, error),
 	Logger testutils.Logger,
 ) []error {
+	// time.Sleep(15 * time.Second)
+	hclient := http.Client{
+		Timeout: 30 * time.Second,
+	}
 	cl2, err := clientFn(true)
 	if err != nil {
 		Logger.Log(err)
@@ -53,9 +58,16 @@ func (smi *SMIConformance) traffic(
 	var jsonStr = []byte(`{"url":"` + ip2 + `/echo", "body":"", "method": "GET", "headers": {"head": "tail"}}`)
 	Logger.Log(string(jsonStr))
 	url := "http://" + ipMap["app-a"] + ":9091/call"
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonStr))
+	resp, err := hclient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
-	resp, err = http.Get("http://" + ipMap["app-a"] + ":9091/metrics")
+	if err != nil {
+		Logger.Log("ERror: ", err)
+		return nil
+	}
+
+	// Logger.Log("Resp: ", resp)
+
+	resp, err = hclient.Get("http://" + ipMap["app-a"] + ":9091/metrics")
 	data, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 	Logger.Log("Body: ", string(data))
@@ -69,6 +81,9 @@ func (smi *SMIConformance) allow(
 	DiscoveryClient func() (discovery.DiscoveryInterface, error),
 	Logger testutils.Logger,
 ) []error {
+	hclient := http.Client{
+		Timeout: 30 * time.Second,
+	}
 	cl2, err := clientFn(true)
 	if err != nil {
 		Logger.Log(err)
@@ -88,9 +103,9 @@ func (smi *SMIConformance) allow(
 	var jsonStr = []byte(`{"url":"` + ip2 + `/echo", "body":"", "method": "GET", "headers": {"head": "tail"}}`)
 	Logger.Log(string(jsonStr))
 	url := "http://" + ipMap["app-a"] + ":9091/call"
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonStr))
+	resp, err := hclient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
-	resp, err = http.Get("http://" + ipMap["app-a"] + ":9091/metrics")
+	resp, err = hclient.Get("http://" + ipMap["app-a"] + ":9091/metrics")
 	data, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 	Logger.Log("Body: ", string(data))

@@ -99,7 +99,7 @@ kind: Service
 metadata:
   name: app-a
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: app-a
   ports:
@@ -113,7 +113,7 @@ kind: Service
 metadata:
   name: app-b
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: app-b
   ports:
@@ -127,11 +127,11 @@ kind: Service
 metadata:
   name: app-c
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: app-c
   ports:
   - name: http
     protocol: TCP
-    port: 9091
-    # targetPort: 9091
+    # port: 9091
+    targetPort: 9091

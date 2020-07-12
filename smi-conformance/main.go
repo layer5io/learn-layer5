@@ -17,7 +17,7 @@ func main() {
 	startKIND := false
 	options := harness.TestSuite{}
 
-	args := []string{"./"}
+	args := []string{"./test-gen/test-yamls/"}
 
 	options.TestDirs = args
 	options.TestDirs = manifestDirs
@@ -37,7 +37,7 @@ func main() {
 	}
 
 	testHandlers := make(map[string]map[string]test.CustomTest)
-	testHandlers["trafficAccess"] = serviceMeshConfObj.TrafficAccessGetTests()
+	testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
 
 	testutils.RunTests("kudo", testToRun, options.Parallel, func(t *testing.T) {
 		harness := test.Harness{
