@@ -1,15 +1,3 @@
-apiVersion: kudo.dev/v1alpha1
-kind: TestStep
-delete:
-- apiVersion: v1
-  kind: Namespace
-  name: kuttl-test-stage
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kuttl-test-stage
----
 apiVersion: v1
 kind: Namespace
 metadata:

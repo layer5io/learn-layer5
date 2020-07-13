@@ -20,9 +20,10 @@ func main() {
 	args := []string{"./test-gen/test-yamls/"}
 
 	options.TestDirs = args
+	options.Timeout = 120
 	options.TestDirs = manifestDirs
 	options.StartKIND = startKIND
-	options.SkipDelete = false
+	options.SkipDelete = true
 
 	if options.KINDContext == "" {
 		options.KINDContext = harness.DefaultKINDContext
