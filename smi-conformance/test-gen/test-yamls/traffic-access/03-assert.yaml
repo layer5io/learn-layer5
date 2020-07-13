@@ -4,6 +4,7 @@ apiVersion: specs.smi-spec.io/v1alpha1
 kind: TCPRoute
 metadata:
   name: service-tcp-route
+  namespace: kuttl-test-stage
 
 # TrafficTarget defines allowed routes for service-a
 # In this example service-a is allowed to connect using
@@ -13,15 +14,18 @@ kind: TrafficTarget
 apiVersion: access.smi-spec.io/v1alpha1
 metadata:
   name: service-targets
-  namespace: default
+  namespace: kuttl-test-stage
+  # namespace: default
 destination:
   kind: ServiceAccount
   name: service-b
-  namespace: default
+  namespace: kuttl-test-stage
+  # namespace: default
 sources:
 - kind: ServiceAccount
   name: service-a
-  namespace: default
+  namespace: kuttl-test-stage
+  # namespace: default
 specs:
 - kind: TCPRoute
   name: service-tcp-route

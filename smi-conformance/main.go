@@ -33,7 +33,11 @@ func main() {
 	}
 
 	serviceMeshConfObj := test_gen.SMIConformance{
-		SMObj: test_gen.Maesh{},
+		SMObj: test_gen.Maesh{
+			PortSvcA: "9091",
+			PortSvcB: "9091",
+			PortSvcC: "9091",
+		},
 	}
 
 	testHandlers := make(map[string]map[string]test.CustomTest)

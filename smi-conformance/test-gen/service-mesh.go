@@ -3,9 +3,9 @@ package test_gen
 import "fmt"
 
 type ServiceMesh interface {
-	SvcAGetInternalName() string
-	SvcBGetInternalName() string
-	SvcCGetInternalName() string
+	SvcAGetInternalName(string) string
+	SvcBGetInternalName(string) string
+	SvcCGetInternalName(string) string
 
 	SvcAGetPort() string
 	SvcBGetPort() string
@@ -13,22 +13,21 @@ type ServiceMesh interface {
 }
 
 type Maesh struct {
-	Namespace string
 	PortSvcA  string
 	PortSvcB  string
 	PortSvcC  string
 }
 
-func (sm Maesh) SvcAGetInternalName() string {
-	return fmt.Sprintf("http://%s.%s.maesh:%s/", SERVICE_A_NAME, sm.Namespace, sm.PortSvcA)
+func (sm Maesh) SvcAGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s.maesh:%s", SERVICE_A_NAME, namespace, sm.PortSvcA)
 }
 
-func (sm Maesh) SvcBGetInternalName() string {
-	return fmt.Sprintf("http://%s.%s.maesh:%s/", SERVICE_B_NAME, sm.Namespace, sm.PortSvcB)
+func (sm Maesh) SvcBGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s.maesh:%s", SERVICE_B_NAME, namespace, sm.PortSvcB)
 }
 
-func (sm Maesh) SvcCGetInternalName() string {
-	return fmt.Sprintf("http://%s.%s.maesh:%s/", SERVICE_C_NAME, sm.Namespace, sm.PortSvcC)
+func (sm Maesh) SvcCGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s.maesh:%s", SERVICE_C_NAME, namespace, sm.PortSvcC)
 }
 
 func (sm Maesh) SvcAGetPort() string {

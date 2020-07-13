@@ -1,22 +1,43 @@
+apiVersion: kudo.dev/v1alpha1
+kind: TestStep
+delete:
+- apiVersion: v1
+  kind: Namespace
+  name: kuttl-test-stage
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuttl-test-stage
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuttl-test-stage
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: service-a
+  namespace: kuttl-test-stage
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: service-b
+  namespace: kuttl-test-stage
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: service-c
+  namespace: kuttl-test-stage
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-a-deployment
+  namespace: kuttl-test-stage
   labels:
     app: app-a
 spec:
@@ -38,12 +59,13 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "Service-a"
+          value: "app-a"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-b-deployment
+  namespace: kuttl-test-stage
   labels:
     app: app-b
 spec:
@@ -65,12 +87,13 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "Service-b"
+          value: "app-b"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-c-deployment
+  namespace: kuttl-test-stage
   labels:
     app: app-c
 spec:
@@ -92,12 +115,13 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "Service-c"
+          value: "app-c"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: app-a
+  namespace: kuttl-test-stage
 spec:
   type: NodePort
   selector:
@@ -112,6 +136,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app-b
+  namespace: kuttl-test-stage
 spec:
   type: NodePort
   selector:
@@ -126,6 +151,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app-c
+  namespace: kuttl-test-stage
 spec:
   type: NodePort
   selector:

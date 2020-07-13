@@ -1,22 +1,31 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuttl-test-stage
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: service-a
+  namespace: kuttl-test-stage
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: service-b
+  namespace: kuttl-test-stage
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: service-c
+  namespace: kuttl-test-stage
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-a-deployment
+  namespace: kuttl-test-stage
 status:
   readyReplicas: 1
 ---
@@ -24,6 +33,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-b-deployment
+  namespace: kuttl-test-stage
 status:
   readyReplicas: 1
 ---
@@ -31,6 +41,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-c-deployment
+  namespace: kuttl-test-stage
 status:
   readyReplicas: 1
 ---
@@ -38,6 +49,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app-a
+  namespace: kuttl-test-stage
 spec:
   type: NodePort
   selector:
@@ -52,6 +64,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app-b
+  namespace: kuttl-test-stage
 spec:
   type: NodePort
   selector:
@@ -66,6 +79,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app-c
+  namespace: kuttl-test-stage
 spec:
   type: NodePort
   selector:
