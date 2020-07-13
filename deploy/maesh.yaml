@@ -97,11 +97,11 @@ mesh:
 # Tracing configuration.
 #
 tracing:
-  deploy: false
+  deploy: true
   jaeger:
     image:
       name: groundnuty/k8s-wait-for:v1.3
-    enabled: false
+    enabled: true
     localagenthostport: ""
     samplingserverurl: ""
   # datadog:
@@ -117,7 +117,7 @@ tracing:
     # (Optional)
     # sameSpan: true
     # (Optional)
-    # id128Bit: false
+    # id128Bit: true
     # (Optional)
     # sampleRate: 0.2
   # instana:
@@ -142,10 +142,10 @@ tracing:
 # Metrics configuration.
 #
 metrics:
-  deploy: false
+  deploy: true
   prometheus:
     # whether to expose Prometheus metrics
-    enabled: false
+    enabled: true
   ## you can override values of the metrics subchart here.
   ## check charts/metrics/values.yaml for the defaults.
   ## example:

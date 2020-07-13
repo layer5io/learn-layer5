@@ -43,6 +43,7 @@ func main() {
 
 	testHandlers := make(map[string]map[string]test.CustomTest)
 	testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
+	testHandlers["traffic-spec"] = serviceMeshConfObj.TrafficSpecGetTests()
 
 	testutils.RunTests("kudo", testToRun, options.Parallel, func(t *testing.T) {
 		harness := test.Harness{
