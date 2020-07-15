@@ -21,6 +21,7 @@ func main() {
 
 	options.TestDirs = args
 	options.Timeout = 120
+	options.Parallel = 1
 	options.TestDirs = manifestDirs
 	options.StartKIND = startKIND
 	options.SkipDelete = true
