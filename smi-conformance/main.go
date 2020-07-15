@@ -34,12 +34,20 @@ func main() {
 		options.TestDirs = args
 	}
 
+	// maeshConfig := test_gen.Maesh{
+	// 	PortSvcA: "9091",
+	// 	PortSvcB: "9091",
+	// 	PortSvcC: "9091",
+	// }
+
+	linkerdConfig := test_gen.Linkerd{
+		PortSvcA: "9091",
+		PortSvcB: "9091",
+		PortSvcC: "9091",
+	}
+
 	serviceMeshConfObj := test_gen.SMIConformance{
-		SMObj: test_gen.Maesh{
-			PortSvcA: "9091",
-			PortSvcB: "9091",
-			PortSvcC: "9091",
-		},
+		SMObj: linkerdConfig,
 	}
 
 	testHandlers := make(map[string]map[string]test.CustomTest)

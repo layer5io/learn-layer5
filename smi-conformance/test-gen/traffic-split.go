@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 	"time"
-	"bytes"
 
 	"github.com/kudobuilder/kuttl/pkg/test"
 	testutils "github.com/kudobuilder/kuttl/pkg/test/utils"
@@ -15,12 +14,12 @@ import (
 func (smi *SMIConformance) TrafficSplitGetTests() map[string]test.CustomTest {
 	testHandlers := make(map[string]test.CustomTest)
 
-	testHandlers["trafficDefault"] = smi.traffics
+	testHandlers["trafficDefault"] = smi.trafficSplitDefault
 
 	return testHandlers
 }
 
-func (smi *SMIConformance) traffics(
+func (smi *SMIConformance) trafficSplitDefault(
 	t *testing.T,
 	namespace string,
 	clientFn func(forceNew bool) (client.Client, error),
@@ -30,7 +29,6 @@ func (smi *SMIConformance) traffics(
 	Logger.Log("Service sdfsdfsdf")
 	time.Sleep(5 * time.Second)
 	namespace = "kuttl-test-stage"
-	httpClient := GetHTTPClient()
 	kubeClient, err := clientFn(false)
 	if err != nil {
 		t.Fail()
@@ -42,31 +40,16 @@ func (smi *SMIConformance) traffics(
 	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
 	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
 
-	// call to metrics (allowed)
-	svcBTestURLMetrics := "http://app-svc.kuttl-test-stage.svc.cluster.local.:9091/echo"
-	jsonStr := []byte(`{"url":"` + svcBTestURLMetrics + `", "body":"", "method": "GET", "headers": {}}`)
+	// Generate traffic to the traffic split service
+	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
+	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
 
 	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
-	for i := 0; i < 10; i++ {
-		if _, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr)); err != nil {
-			Logger.Log(err)
-			break;
-		}
-	}
-	if err != nil {
+
+	if err = generatePOSTLoad(20, url, jsonStr); err != nil {
 		t.Fail()
 		return []error{err}
 	}
-
-	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
-	if err != nil {
-		t.Fail()
-		return []error{err}
-	}
-
-	Logger.Log("Service A : Response Falied", metricsSvcA.RespFailed)
-	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
-	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
 
 	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
 	if err != nil {
@@ -81,6 +64,12 @@ func (smi *SMIConformance) traffics(
 		return []error{err}
 	}
 	Logger.Log("Service C : Requests Recieved", metricsSvcC.ReqReceived)
+
+	if len(metricsSvcB.ReqReceived) == 0 || len(metricsSvcC.ReqReceived) == 0 {
+		t.Fail()
+		return nil
+	}
+	Logger.Log("Validated: Random Request count")
 
 	Logger.Log("Done")
 	return nil

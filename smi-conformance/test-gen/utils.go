@@ -1,6 +1,7 @@
 package test_gen
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -91,10 +92,10 @@ func GetMetrics(hostname string, port string) (*MetricResponse, error) {
 	return &metrics, nil
 }
 
-func generateLoad(no int, url string) error {
+func generatePOSTLoad(no int, url string, body []byte) error {
 	hclient := GetHTTPClient()
 	for i := 0; i < no; i++ {
-		if _, err := hclient.Get(url); err != nil {
+		if _, err := hclient.Post(url, "application/json", bytes.NewReader(body)); err != nil {
 			return err
 		}
 	}
