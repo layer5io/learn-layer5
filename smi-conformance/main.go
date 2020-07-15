@@ -13,7 +13,7 @@ import (
 
 func main() {
 	manifestDirs := []string{}
-	testToRun := ""
+	testToRun := "traffic-split"
 	startKIND := false
 	options := harness.TestSuite{}
 
@@ -45,6 +45,7 @@ func main() {
 	testHandlers := make(map[string]map[string]test.CustomTest)
 	testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
 	testHandlers["traffic-spec"] = serviceMeshConfObj.TrafficSpecGetTests()
+	testHandlers["traffic-split"] = serviceMeshConfObj.TrafficSplitGetTests()
 
 	testutils.RunTests("kudo", testToRun, options.Parallel, func(t *testing.T) {
 		harness := test.Harness{
