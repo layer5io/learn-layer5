@@ -90,3 +90,13 @@ func GetMetrics(hostname string, port string) (*MetricResponse, error) {
 	}
 	return &metrics, nil
 }
+
+func generateLoad(no int, url string) error {
+	hclient := GetHTTPClient()
+	for i := 0; i < no; i++ {
+		if _, err := hclient.Get(url); err != nil {
+			return err
+		}
+	}
+	return nil
+}

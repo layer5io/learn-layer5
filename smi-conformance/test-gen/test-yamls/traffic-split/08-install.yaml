@@ -1,0 +1,12 @@
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: server-split
+  namespace: kuttl-test-stage
+spec:
+  service: app-svc
+  backends:
+  - service: app-b
+    weight: 75
+  - service: app-c
+    weight: 25
