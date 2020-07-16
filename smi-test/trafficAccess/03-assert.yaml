@@ -13,15 +13,15 @@ kind: TrafficTarget
 apiVersion: access.smi-spec.io/v1alpha1
 metadata:
   name: service-targets
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 destination:
   kind: ServiceAccount
   name: service-b
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 sources:
 - kind: ServiceAccount
   name: service-a
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 specs:
 - kind: TCPRoute
   name: service-tcp-route

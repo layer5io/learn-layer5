@@ -3,4 +3,4 @@ kind: TestStep
 delete:
 - apiVersion: v1
   kind: Namespace
-  name: kuttl-test-stage
+  name: <NAMESPACE>

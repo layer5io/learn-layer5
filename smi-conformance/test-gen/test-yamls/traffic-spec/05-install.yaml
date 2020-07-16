@@ -2,7 +2,7 @@ apiVersion: specs.smi-spec.io/v1alpha1
 kind: HTTPRouteGroup
 metadata:
   name: http-rg
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 matches:
 - name: testMatch
   pathRegex: ".*"
@@ -13,16 +13,16 @@ apiVersion: access.smi-spec.io/v1alpha1
 kind: TrafficTarget
 metadata:
   name: service-targets
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 destination:
   kind: ServiceAccount
   name: service-b
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
   port: "9091"
 sources:
 - kind: ServiceAccount
   name: service-a
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 specs:
 - kind: HTTPRouteGroup
   name: http-rg

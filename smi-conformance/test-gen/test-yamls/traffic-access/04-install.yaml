@@ -3,21 +3,21 @@ apiVersion: specs.smi-spec.io/v1alpha1
 kind: TCPRoute
 metadata:
   name: service-tcp-route
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 ---
 apiVersion: access.smi-spec.io/v1alpha1
 kind: TrafficTarget
 metadata:
   name: service-targets
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 destination:
   kind: ServiceAccount
   name: service-b
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 sources:
 - kind: ServiceAccount
   name: service-a
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
 specs:
 - kind: TCPRoute
   name: service-tcp-route

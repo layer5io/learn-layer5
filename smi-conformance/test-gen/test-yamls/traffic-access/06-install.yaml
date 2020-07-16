@@ -3,9 +3,9 @@ kind: TestStep
 delete:
 - apiVersion: specs.smi-spec.io/v1alpha1
   kind: TCPRoute
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
   name: service-tcp-route
 - apiVersion: access.smi-spec.io/v1alpha1
   kind: TrafficTarget
-  namespace: kuttl-test-stage
+  namespace: <NAMESPACE>
   name: service-targets
