@@ -39,9 +39,7 @@ func (smi *SMIConformance) traffic(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	var jsonStr = []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "GET", "headers": {}}`)
@@ -96,9 +94,7 @@ func (smi *SMIConformance) allow(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	var jsonStr = []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "GET", "headers": {}}`)
