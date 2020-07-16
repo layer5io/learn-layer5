@@ -101,3 +101,9 @@ func generatePOSTLoad(no int, url string, body []byte) error {
 	}
 	return nil
 }
+
+func ClearAllMetrics(clusterIPs map[string]string, smObj ServiceMesh) {
+	ClearMetrics(clusterIPs[SERVICE_A_NAME], smObj.SvcAGetPort())
+	ClearMetrics(clusterIPs[SERVICE_B_NAME], smObj.SvcBGetPort())
+	ClearMetrics(clusterIPs[SERVICE_C_NAME], smObj.SvcCGetPort())
+}

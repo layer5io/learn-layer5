@@ -25,6 +25,15 @@ func (smi *SMIConformance) TrafficSplitGetTests() map[string]test.CustomTest {
 	return testHandlers
 }
 
+func trafficSplitTestScenario(clusterIPs map[string]string, namespace string, smObj ServiceMesh) error {
+	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
+	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
+
+	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smObj.SvcAGetPort(), CALL)
+
+	return generatePOSTLoad(reqNo, url, jsonStr)
+}
+
 func (smi *SMIConformance) trafficSplitDefault(
 	t *testing.T,
 	namespace string,
@@ -41,17 +50,9 @@ func (smi *SMIConformance) trafficSplitDefault(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
-	// Generate traffic to the traffic split service
-	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
-	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
-
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
-
-	if err = generatePOSTLoad(20, url, jsonStr); err != nil {
+	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
 		t.Fail()
 		return []error{err}
 	}
@@ -100,13 +101,9 @@ func (smi *SMIConformance) trafficSplitOnlyB(
 	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
 	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
 
-	// Generate traffic to the traffic split service
-	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
-	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
-
-	if err = generatePOSTLoad(reqNo, url, jsonStr); err != nil {
+	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
 		t.Fail()
 		return []error{err}
 	}
@@ -151,17 +148,9 @@ func (smi *SMIConformance) trafficSplitOnlyC(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
-	// Generate traffic to the traffic split service
-	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
-	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
-
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
-
-	if err = generatePOSTLoad(reqNo, url, jsonStr); err != nil {
+	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
 		t.Fail()
 		return []error{err}
 	}
@@ -210,13 +199,9 @@ func (smi *SMIConformance) trafficSplitBGrtC(
 	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
 	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
 
-	// Generate traffic to the traffic split service
-	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
-	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
-
-	if err = generatePOSTLoad(reqNo, url, jsonStr); err != nil {
+	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
 		t.Fail()
 		return []error{err}
 	}
@@ -261,17 +246,9 @@ func (smi *SMIConformance) trafficSplitCGrtB(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
-	// Generate traffic to the traffic split service
-	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
-	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
-
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
-
-	if err = generatePOSTLoad(reqNo, url, jsonStr); err != nil {
+	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
 		t.Fail()
 		return []error{err}
 	}

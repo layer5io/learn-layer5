@@ -12,10 +12,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type SMIConformance struct {
-	SMObj ServiceMesh
-}
-
 func (smi *SMIConformance) TrafficAccessGetTests() map[string]test.CustomTest {
 	testHandlers := make(map[string]test.CustomTest)
 
@@ -34,7 +30,7 @@ func (smi *SMIConformance) traffic(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace  = "kuttl-test-stage"
+	namespace = "kuttl-test-stage"
 	httpClient := GetHTTPClient()
 	kubeClient, err := clientFn(false)
 	if err != nil {
@@ -63,7 +59,7 @@ func (smi *SMIConformance) traffic(
 		t.Fail()
 		return []error{err}
 	}
-	
+
 	Logger.Log("Service A : Response Falied", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
 	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
@@ -91,7 +87,7 @@ func (smi *SMIConformance) allow(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace  = "kuttl-test-stage"
+	namespace = "kuttl-test-stage"
 	httpClient := GetHTTPClient()
 	kubeClient, err := clientFn(false)
 	if err != nil {
@@ -116,8 +112,7 @@ func (smi *SMIConformance) allow(
 	}
 
 	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
-	
-	
+
 	if err != nil {
 		t.Fail()
 		return []error{err}
@@ -126,13 +121,13 @@ func (smi *SMIConformance) allow(
 	Logger.Log("Service A : Response Falied", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
 	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
-	
+
 	if !(len(metricsSvcA.RespFailed) == 0 && len(metricsSvcA.RespSucceeded) == 1) {
 		t.Fail()
 		return nil
 	}
 	Logger.Log("Validated: Response count")
-	
+
 	if metricsSvcA.RespSucceeded[0].URL != svcBTestURL {
 		t.Fail()
 		return nil
@@ -142,8 +137,8 @@ func (smi *SMIConformance) allow(
 	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
 	if err != nil {
 		t.Fail()
-	Logger.Log("Error: ", err)
-	return []error{err}
+		Logger.Log("Error: ", err)
+		return []error{err}
 	}
 
 	Logger.Log("Service B : Response Falied", metricsSvcB.RespFailed)

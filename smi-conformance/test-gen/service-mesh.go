@@ -2,6 +2,10 @@ package test_gen
 
 import "fmt"
 
+type SMIConformance struct {
+	SMObj ServiceMesh
+}
+
 type ServiceMesh interface {
 	SvcAGetInternalName(string) string
 	SvcBGetInternalName(string) string
