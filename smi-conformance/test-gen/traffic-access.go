@@ -58,7 +58,7 @@ func (smi *SMIConformance) traffic(
 		return []error{err}
 	}
 
-	Logger.Log("Service A : Response Falied", metricsSvcA.RespFailed)
+	Logger.Log("Service A : Response Failed", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
 	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
 
@@ -114,7 +114,7 @@ func (smi *SMIConformance) allow(
 		return []error{err}
 	}
 
-	Logger.Log("Service A : Response Falied", metricsSvcA.RespFailed)
+	Logger.Log("Service A : Response Failed", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
 	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
 
@@ -137,7 +137,7 @@ func (smi *SMIConformance) allow(
 		return []error{err}
 	}
 
-	Logger.Log("Service B : Response Falied", metricsSvcB.RespFailed)
+	Logger.Log("Service B : Response Failed", metricsSvcB.RespFailed)
 	Logger.Log("Service B : Response Succeeded", metricsSvcB.RespSucceeded)
 	Logger.Log("Service B : Requests Recieved", metricsSvcB.ReqReceived)
 

@@ -73,9 +73,9 @@ func (smi *SMIConformance) trafficPath(
 		return []error{err}
 	}
 
-	Logger.Log("Service A : Response Falied", metricsSvcA.RespFailed)
+	Logger.Log("Service A : Response Failed", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
-	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
+	Logger.Log("Service A : Requests Received", metricsSvcA.ReqReceived)
 
 	if !(len(metricsSvcA.RespFailed) == 1 && len(metricsSvcA.RespSucceeded) == 1) {
 		t.Fail()
@@ -147,7 +147,7 @@ func (smi *SMIConformance) trafficMethod(
 		return []error{err}
 	}
 
-	Logger.Log("Service A : Response Falied", metricsSvcA.RespFailed)
+	Logger.Log("Service A : Response Failed", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
 	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
 
