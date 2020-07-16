@@ -30,7 +30,7 @@ func (smi *SMIConformance) trafficPath(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace = "kuttl-test-stage"
+
 	httpClient := GetHTTPClient()
 	kubeClient, err := clientFn(false)
 	if err != nil {
@@ -105,7 +105,7 @@ func (smi *SMIConformance) trafficMethod(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace = "kuttl-test-stage"
+
 	httpClient := GetHTTPClient()
 	kubeClient, err := clientFn(false)
 	if err != nil {

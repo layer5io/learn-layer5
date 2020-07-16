@@ -42,7 +42,7 @@ func (smi *SMIConformance) trafficSplitDefault(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace = "kuttl-test-stage"
+
 	kubeClient, err := clientFn(false)
 	if err != nil {
 		t.Fail()
@@ -89,7 +89,7 @@ func (smi *SMIConformance) trafficSplitOnlyB(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace = "kuttl-test-stage"
+
 	kubeClient, err := clientFn(false)
 	if err != nil {
 		t.Fail()
@@ -140,7 +140,7 @@ func (smi *SMIConformance) trafficSplitOnlyC(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace = "kuttl-test-stage"
+
 	kubeClient, err := clientFn(false)
 	if err != nil {
 		t.Fail()
@@ -187,7 +187,7 @@ func (smi *SMIConformance) trafficSplitBGrtC(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace = "kuttl-test-stage"
+
 	kubeClient, err := clientFn(false)
 	if err != nil {
 		t.Fail()
@@ -238,7 +238,7 @@ func (smi *SMIConformance) trafficSplitCGrtB(
 	Logger testutils.Logger,
 ) []error {
 	time.Sleep(5 * time.Second)
-	namespace = "kuttl-test-stage"
+
 	kubeClient, err := clientFn(false)
 	if err != nil {
 		t.Fail()

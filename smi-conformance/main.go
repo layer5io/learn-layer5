@@ -63,6 +63,8 @@ func main() {
 		}
 		s, _ := json.MarshalIndent(options, "", "  ")
 		fmt.Printf("Running integration tests with following options:\n%s\n", string(s))
-		harness.Run()
+		results := harness.Run()
+		data, _ := json.Marshal(results)
+		fmt.Printf("Results :\n%v\n", data)
 	})
 }
