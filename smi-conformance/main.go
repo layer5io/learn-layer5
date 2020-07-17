@@ -46,6 +46,8 @@ func main() {
 		PortSvcC: "9091",
 	}
 
+	annotations := make(map[string]string)
+annotations["linkerd.io/inject"] = "enabled"
 	serviceMeshConfObj := test_gen.SMIConformance{
 		SMObj: linkerdConfig,
 	}
@@ -60,11 +62,12 @@ func main() {
 			TestSuite:        options,
 			T:                t,
 			SuiteCustomTests: testHandlers,
+			NamespaceAnnotations: annotations,
 		}
 		s, _ := json.MarshalIndent(options, "", "  ")
 		fmt.Printf("Running integration tests with following options:\n%s\n", string(s))
 		results := harness.Run()
 		data, _ := json.Marshal(results)
-		fmt.Printf("Results :\n%v\n", data)
+		fmt.Printf("Results :\n%v\n", string(data))
 	})
 }
