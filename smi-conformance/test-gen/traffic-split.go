@@ -97,10 +97,6 @@ func (smi *SMIConformance) trafficSplitOnlyB(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
-
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
@@ -194,10 +190,6 @@ func (smi *SMIConformance) trafficSplitBGrtC(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
 
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 

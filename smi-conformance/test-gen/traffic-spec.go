@@ -39,9 +39,7 @@ func (smi *SMIConformance) trafficPath(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	// call to metrics (allowed)
 	svcBTestURLMetrics := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), METRICS)
@@ -114,9 +112,7 @@ func (smi *SMIConformance) trafficMethod(
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
 
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smi.SMObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smi.SMObj.SvcCGetPort())
+	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	// GET to echo (allowed)
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)

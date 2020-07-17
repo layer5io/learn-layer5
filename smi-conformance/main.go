@@ -47,7 +47,8 @@ func main() {
 	}
 
 	annotations := make(map[string]string)
-annotations["linkerd.io/inject"] = "enabled"
+	annotations["linkerd.io/inject"] = "enabled"
+
 	serviceMeshConfObj := test_gen.SMIConformance{
 		SMObj: linkerdConfig,
 	}
@@ -59,9 +60,9 @@ annotations["linkerd.io/inject"] = "enabled"
 
 	testutils.RunTests("kudo", testToRun, options.Parallel, func(t *testing.T) {
 		harness := test.Harness{
-			TestSuite:        options,
-			T:                t,
-			SuiteCustomTests: testHandlers,
+			TestSuite:            options,
+			T:                    t,
+			SuiteCustomTests:     testHandlers,
 			NamespaceAnnotations: annotations,
 		}
 		s, _ := json.MarshalIndent(options, "", "  ")
