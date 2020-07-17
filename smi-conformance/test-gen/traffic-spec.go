@@ -48,8 +48,11 @@ func (smi *SMIConformance) trafficPath(
 	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
+	Logger.Logf("URL : \n", url)
+	Logger.Logf("Body : \n", string(jsonStr))
 	if err != nil {
 		t.Fail()
+		Logger.Logf("Error : %s", err.Error())
 		return []error{err}
 	}
 
@@ -68,6 +71,7 @@ func (smi *SMIConformance) trafficPath(
 	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
 	if err != nil {
 		t.Fail()
+		Logger.Logf("Error : %s", err.Error())
 		return []error{err}
 	}
 
@@ -121,8 +125,11 @@ func (smi *SMIConformance) trafficMethod(
 	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
+	Logger.Logf("URL : \n", url)
+	Logger.Logf("Body : \n", string(jsonStr))
 	if err != nil {
 		t.Fail()
+		Logger.Logf("Error : %s", err.Error())
 		return []error{err}
 	}
 
@@ -132,14 +139,18 @@ func (smi *SMIConformance) trafficMethod(
 	url = fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
+	Logger.Logf("URL : \n", url)
+	Logger.Logf("Body : \n", string(jsonStr))
 	if err != nil {
 		t.Fail()
+		Logger.Logf("Error : %s", err.Error())
 		return []error{err}
 	}
 
 	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
 	if err != nil {
 		t.Fail()
+		Logger.Logf("Error : %s", err.Error())
 		return []error{err}
 	}
 

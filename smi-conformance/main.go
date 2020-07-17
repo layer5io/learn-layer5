@@ -13,7 +13,12 @@ import (
 
 func main() {
 	manifestDirs := []string{}
-	testToRun := "traffic-split"
+
+	// Run all testCases
+	testToRun := ""
+	// Run only traffic-split
+	// testToRun := "traffic-split"
+
 	startKIND := false
 	options := harness.TestSuite{}
 
@@ -40,17 +45,18 @@ func main() {
 	// 	PortSvcC: "9091",
 	// }
 
-	linkerdConfig := test_gen.Linkerd{
+	meshConfig := test_gen.Maesh{
 		PortSvcA: "9091",
 		PortSvcB: "9091",
 		PortSvcC: "9091",
 	}
 
 	annotations := make(map[string]string)
-	annotations["linkerd.io/inject"] = "enabled"
+	// Namespace Injection
+	// annotations["linkerd.io/inject"] = "enabled"
 
 	serviceMeshConfObj := test_gen.SMIConformance{
-		SMObj: linkerdConfig,
+		SMObj: meshConfig,
 	}
 
 	testHandlers := make(map[string]map[string]test.CustomTest)
@@ -65,10 +71,15 @@ func main() {
 			SuiteCustomTests:     testHandlers,
 			NamespaceAnnotations: annotations,
 		}
+
+		// Runs the test using the inCluster kubeConfig (runs only when the code is running inside the pod)
+		// harness.InCluster = true
+
 		s, _ := json.MarshalIndent(options, "", "  ")
 		fmt.Printf("Running integration tests with following options:\n%s\n", string(s))
 		results := harness.Run()
 		data, _ := json.Marshal(results)
+		// Results of the test
 		fmt.Printf("Results :\n%v\n", string(data))
 	})
 }
