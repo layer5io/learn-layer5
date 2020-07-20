@@ -2,10 +2,13 @@ package test_gen
 
 import "fmt"
 
+// SMIConformance holds the SMI conformance tests
 type SMIConformance struct {
 	SMObj ServiceMesh
 }
 
+// ServiceMesh provides an abstract interface for different service meshes.
+// This is required as each service mesh has different ways to expose their internals.
 type ServiceMesh interface {
 	SvcAGetInternalName(string) string
 	SvcBGetInternalName(string) string

@@ -41,7 +41,7 @@ func (smi *SMIConformance) trafficPath(
 
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
-	// call to metrics (allowed)
+	// call to SERVICE B metrics (allowed)
 	svcBTestURLMetrics := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), METRICS)
 	jsonStr := []byte(`{"url":"` + svcBTestURLMetrics + `", "body":"", "method": "GET", "headers": {}}`)
 
@@ -56,7 +56,7 @@ func (smi *SMIConformance) trafficPath(
 		return []error{err}
 	}
 
-	// call to echo (blocked)
+	// call to SERVICE B echo (blocked)
 	svcBTestURLEcho := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	jsonStr = []byte(`{"url":"` + svcBTestURLEcho + `", "body":"", "method": "GET", "headers": {}}`)
 
@@ -79,6 +79,7 @@ func (smi *SMIConformance) trafficPath(
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
 	Logger.Log("Service A : Requests Received", metricsSvcA.ReqReceived)
 
+	// validates the requests that failed and the ones that succeeded
 	if !(len(metricsSvcA.RespFailed) == 1 && len(metricsSvcA.RespSucceeded) == 1) {
 		t.Fail()
 		return nil
@@ -156,8 +157,9 @@ func (smi *SMIConformance) trafficMethod(
 
 	Logger.Log("Service A : Response Failed", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
-	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
+	Logger.Log("Service A : Requests Received", metricsSvcA.ReqReceived)
 
+	// validates the requests that failed and the ones that succeeded
 	if !(len(metricsSvcA.RespFailed) == 1 && len(metricsSvcA.RespSucceeded) == 1) {
 		t.Fail()
 		return nil

@@ -15,14 +15,14 @@ import (
 func (smi *SMIConformance) TrafficAccessGetTests() map[string]test.CustomTest {
 	testHandlers := make(map[string]test.CustomTest)
 
-	testHandlers["trafficDefault"] = smi.traffic
-	testHandlers["trafficAllowed"] = smi.allow
-	testHandlers["trafficBlocked"] = smi.traffic
+	testHandlers["trafficDefault"] = smi.trafficBlocked
+	testHandlers["trafficAllowed"] = smi.trafficAllow
+	testHandlers["trafficBlocked"] = smi.trafficBlocked
 
 	return testHandlers
 }
 
-func (smi *SMIConformance) traffic(
+func (smi *SMIConformance) trafficBlocked(
 	t *testing.T,
 	namespace string,
 	clientFn func(forceNew bool) (client.Client, error),
@@ -41,6 +41,7 @@ func (smi *SMIConformance) traffic(
 
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
+	// This test will make SERVICE A make a request to SERVICE B
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	var jsonStr = []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "GET", "headers": {}}`)
 
@@ -64,8 +65,9 @@ func (smi *SMIConformance) traffic(
 
 	Logger.Log("Service A : Response Failed", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
-	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
+	Logger.Log("Service A : Requests Received", metricsSvcA.ReqReceived)
 
+	// Validates if the request failed
 	if !(len(metricsSvcA.RespFailed) == 1 && len(metricsSvcA.RespSucceeded) == 0) {
 		t.Fail()
 		return nil
@@ -81,7 +83,7 @@ func (smi *SMIConformance) traffic(
 	return nil
 }
 
-func (smi *SMIConformance) allow(
+func (smi *SMIConformance) trafficAllow(
 	t *testing.T,
 	namespace string,
 	clientFn func(forceNew bool) (client.Client, error),
@@ -101,6 +103,7 @@ func (smi *SMIConformance) allow(
 
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
+	// This test will make SERVICE A make a request to SERVICE B
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	var jsonStr = []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "GET", "headers": {}}`)
 
@@ -125,8 +128,9 @@ func (smi *SMIConformance) allow(
 
 	Logger.Log("Service A : Response Failed", metricsSvcA.RespFailed)
 	Logger.Log("Service A : Response Succeeded", metricsSvcA.RespSucceeded)
-	Logger.Log("Service A : Requests Recieved", metricsSvcA.ReqReceived)
+	Logger.Log("Service A : Requests Received", metricsSvcA.ReqReceived)
 
+	// Validates if the request succeeded
 	if !(len(metricsSvcA.RespFailed) == 0 && len(metricsSvcA.RespSucceeded) == 1) {
 		t.Fail()
 		return nil
@@ -148,7 +152,7 @@ func (smi *SMIConformance) allow(
 
 	Logger.Log("Service B : Response Failed", metricsSvcB.RespFailed)
 	Logger.Log("Service B : Response Succeeded", metricsSvcB.RespSucceeded)
-	Logger.Log("Service B : Requests Recieved", metricsSvcB.ReqReceived)
+	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
 	if !(len(metricsSvcB.ReqReceived) == 1) {
 		t.Fail()

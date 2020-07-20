@@ -14,29 +14,35 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+// App service names
 const (
 	SERVICE_A_NAME = "app-a"
 	SERVICE_B_NAME = "app-b"
 	SERVICE_C_NAME = "app-c"
 )
 
+// App API endpoints
 const (
 	METRICS = "metrics"
 	CALL    = "call"
 	ECHO    = "echo"
 )
 
+// URLstruct is a part of the metrics exposed by the app
 type URLstruct struct {
 	URL     string
 	Method  string
 	Headers map[string]string
 }
+
+// MetricResponse is a part of the metrics exposed by the app
 type MetricResponse struct {
 	ReqReceived   []string
 	RespSucceeded []URLstruct
 	RespFailed    []URLstruct
 }
 
+// GetClusterIPs returns the ClusterIPs of various services exposed in the namespace
 func GetClusterIPs(kubeClient client.Client, namespace string) (map[string]string, error) {
 	deps := &v1.ServiceList{}
 	err := kubeClient.List(context.TODO(), deps, client.InNamespace(namespace))
@@ -50,6 +56,7 @@ func GetClusterIPs(kubeClient client.Client, namespace string) (map[string]strin
 	return ipMap, nil
 }
 
+// GetHTTPClient returns a configured HTTP client
 func GetHTTPClient() http.Client {
 	return http.Client{
 		Timeout: 30 * time.Second,

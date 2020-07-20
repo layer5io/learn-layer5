@@ -11,7 +11,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-const reqNo = 20
+const reqNo = 50
 
 func (smi *SMIConformance) TrafficSplitGetTests() map[string]test.CustomTest {
 	testHandlers := make(map[string]test.CustomTest)
@@ -25,6 +25,7 @@ func (smi *SMIConformance) TrafficSplitGetTests() map[string]test.CustomTest {
 	return testHandlers
 }
 
+// Executes a Test Scenario where SERVICE A makes a request to the service named `app-svc`
 func trafficSplitTestScenario(clusterIPs map[string]string, namespace string, smObj ServiceMesh) error {
 	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
 	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
@@ -62,14 +63,14 @@ func (smi *SMIConformance) trafficSplitDefault(
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service B : Requests Recieved", metricsSvcB.ReqReceived)
+	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
 	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service C : Requests Recieved", metricsSvcC.ReqReceived)
+	Logger.Log("Service C : Requests Received", metricsSvcC.ReqReceived)
 
 	if len(metricsSvcB.ReqReceived) == 0 || len(metricsSvcC.ReqReceived) == 0 {
 		t.Fail()
@@ -109,14 +110,14 @@ func (smi *SMIConformance) trafficSplitOnlyB(
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service B : Requests Recieved", metricsSvcB.ReqReceived)
+	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
 	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service C : Requests Recieved", metricsSvcC.ReqReceived)
+	Logger.Log("Service C : Requests Received", metricsSvcC.ReqReceived)
 
 	if !(len(metricsSvcB.ReqReceived) == reqNo && len(metricsSvcC.ReqReceived) == 0) {
 		t.Fail()
@@ -156,14 +157,14 @@ func (smi *SMIConformance) trafficSplitOnlyC(
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service B : Requests Recieved", metricsSvcB.ReqReceived)
+	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
 	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service C : Requests Recieved", metricsSvcC.ReqReceived)
+	Logger.Log("Service C : Requests Received", metricsSvcC.ReqReceived)
 
 	if !(len(metricsSvcB.ReqReceived) == 0 && len(metricsSvcC.ReqReceived) == reqNo) {
 		t.Fail()
@@ -203,14 +204,14 @@ func (smi *SMIConformance) trafficSplitBGrtC(
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service B : Requests Recieved", metricsSvcB.ReqReceived)
+	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
 	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service C : Requests Recieved", metricsSvcC.ReqReceived)
+	Logger.Log("Service C : Requests Received", metricsSvcC.ReqReceived)
 
 	if !(len(metricsSvcB.ReqReceived) > len(metricsSvcC.ReqReceived)) {
 		t.Fail()
@@ -250,14 +251,14 @@ func (smi *SMIConformance) trafficSplitCGrtB(
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service B : Requests Recieved", metricsSvcB.ReqReceived)
+	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
 	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
-	Logger.Log("Service C : Requests Recieved", metricsSvcC.ReqReceived)
+	Logger.Log("Service C : Requests Received", metricsSvcC.ReqReceived)
 
 	if !(len(metricsSvcB.ReqReceived) < len(metricsSvcC.ReqReceived)) {
 		t.Fail()
