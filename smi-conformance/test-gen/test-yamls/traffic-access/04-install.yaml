@@ -1,16 +1,12 @@
-# TCPRoute for Counting Service
 ---
 apiVersion: specs.smi-spec.io/v1alpha1
 kind: TCPRoute
 metadata:
   name: service-tcp-route
-
-# TrafficTarget defines allowed routes for service-a
-# In this example service-a is allowed to connect using
-# TCP
+  namespace: <NAMESPACE>
 ---
-kind: TrafficTarget
 apiVersion: access.smi-spec.io/v1alpha1
+kind: TrafficTarget
 metadata:
   name: service-targets
   namespace: <NAMESPACE>

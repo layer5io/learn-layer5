@@ -1,4 +1,3 @@
-
 <p style="text-align:center;" align="center">
   <img align="center" src="https://raw.githubusercontent.com/layer5io/layer5/master/assets/images/layer5/layer5-tag-white-bg.png" width="45%" /></p>
 
@@ -120,9 +119,19 @@ Meshery allows you to sechedule tests and invoke them programmatically. Meshery 
 
 To manually invoke SMI Conformance test for a deployed service mesh, you can apply tests from the `smi-test` directory of this repository. Execute the following command to run the smi-conformace tests:
 
+# To check for smi conformance of a deployed service mesh
+We use kuttl to check for SMI conformance. All the tests are writtten in smi-test directory of this repository.
+Execute the following command in `./smi-conformance` to run the smi-conformace tests:-
+
+```shell
+go run main.go
+```
+
+<!--
 ```shell
 kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
 ```
+-->
 
 <br /><br /><p align="center"><i>If you’re using Learn Layer5 or if you like the project, please <a href="https://github.com/layer5io/meshery/stargazers">★</a> star this repository to show your support! 🤩</i></p>
 </p>

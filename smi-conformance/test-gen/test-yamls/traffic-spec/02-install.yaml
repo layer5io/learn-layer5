@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: <NAMESPACE>
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: service-a
@@ -47,7 +42,7 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "service-a"
+          value: "app-a"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -75,7 +70,7 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "service-b"
+          value: "app-b"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -103,7 +98,7 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "service-c"
+          value: "app-c"
 ---
 apiVersion: v1
 kind: Service

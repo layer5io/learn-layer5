@@ -1,26 +1,3 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: <NAMESPACE>
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: service-a
-  namespace: <NAMESPACE>
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: service-b
-  namespace: <NAMESPACE>
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: service-c
-  namespace: <NAMESPACE>
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -38,7 +15,6 @@ spec:
       labels:
         app: app-a
     spec:
-      serviceAccountName: service-a
       containers:
       - name: app-a
         image: layer5/learn-layer5:latest
@@ -47,7 +23,7 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "service-a"
+          value: "app-a"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -55,27 +31,30 @@ metadata:
   name: app-b-deployment
   namespace: <NAMESPACE>
   labels:
-    app: app-b
+    app: app
+    version: b
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-b
+      app: app
+      version: b
   template:
     metadata:
       labels:
-        app: app-b
+        app: app
+        version: b
     spec:
-      serviceAccountName: service-b
       containers:
       - name: app-b
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
           name: http
+          protocol: TCP
         env:
         - name: SERVICE_NAME
-          value: "service-b"
+          value: "app-b"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -83,27 +62,30 @@ metadata:
   name: app-c-deployment
   namespace: <NAMESPACE>
   labels:
-    app: app-c
+      app: app
+      version: c
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-c
+      app: app
+      version: c
   template:
     metadata:
       labels:
-        app: app-c
+        app: app
+        version: c
     spec:
-      serviceAccountName: service-c
       containers:
       - name: app-c
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
           name: http
+          protocol: TCP
         env:
         - name: SERVICE_NAME
-          value: "service-c"
+          value: "app-c"
 ---
 apiVersion: v1
 kind: Service
@@ -128,7 +110,8 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: app-b
+    app: app
+    version: b
   ports:
   - name: http
     protocol: TCP
@@ -143,7 +126,23 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: app-c
+    app: app
+    version: c
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    targetPort: 9091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc
+  namespace: <NAMESPACE>
+spec:
+  type: NodePort
+  selector:
+    app: app
   ports:
   - name: http
     protocol: TCP

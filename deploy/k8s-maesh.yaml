@@ -47,7 +47,7 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "service-a"
+          value: "Service-a"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -75,7 +75,7 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "service-b"
+          value: "Service-b"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -103,7 +103,7 @@ spec:
           name: http
         env:
         - name: SERVICE_NAME
-          value: "service-c"
+          value: "Service-c"
 ---
 apiVersion: v1
 kind: Service

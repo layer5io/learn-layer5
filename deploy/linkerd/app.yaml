@@ -1,7 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <NAMESPACE>
+  annotations: 
+    'linkerd.io/inject': 'enabled'
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-a
+  name: app-a-deployment
+  namespace: <NAMESPACE>
   labels:
     app: app-a
 spec:
@@ -19,98 +27,120 @@ spec:
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
+          name: http
         env:
         - name: SERVICE_NAME
-          value: "Service-A"
+          value: "app-a"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-b
+  name: app-b-deployment
+  namespace: <NAMESPACE>
   labels:
-    app: app-b
+    app: app
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-b
+      app: app
+      version: v1
   template:
     metadata:
       labels:
-        app: app-b
+        app: app
+        version: v1
     spec:
       containers:
       - name: app-b
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
+          name: http
+          protocol: TCP
         env:
         - name: SERVICE_NAME
-          value: "Service-B"
+          value: "app-b"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-c
+  name: app-c-deployment
+  namespace: <NAMESPACE>
   labels:
-    app: app-c
+      app: app
+      version: v2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-c
+      app: app
+      version: v2
   template:
     metadata:
       labels:
-        app: app-c
+        app: app
+        version: v2
     spec:
       containers:
       - name: app-c
         image: layer5/learn-layer5:latest
         ports:
         - containerPort: 9091
+          name: http
+          protocol: TCP
         env:
         - name: SERVICE_NAME
-          value: "Service-C"
+          value: "app-c"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-a
+  name: app-v1
+  namespace: <NAMESPACE>
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
-    app: app-a
+    app: app
+    version: v1
   ports:
   - name: http
     protocol: TCP
     port: 9091
-    # targetPort: 9091
+    targetPort: 9091
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-b
+  name: app-v2
+  namespace: <NAMESPACE>
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
-    app: app-b
+    app: app
+    version: v2
   ports:
   - name: http
     protocol: TCP
     port: 9091
-    # targetPort: 9091
+    targetPort: 9091
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-c
+  name: app-svc
+  namespace: <NAMESPACE>
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
-    app: app-c
+    app: app
   ports:
   - name: http
     protocol: TCP
     port: 9091
-    # targetPort: 9091
+    targetPort: 9091
+
+# for i in {1..20};do curl app-svc.<NAMESPACE>.svc.cluster.local.:9091/echo; echo; done
+# curl app-v1.<NAMESPACE>.svc.cluster.local.:9091/metrics
+# curl -X "DELETE" app-v1.<NAMESPACE>.svc.cluster.local.:9091/metrics

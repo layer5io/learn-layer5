@@ -4,6 +4,7 @@ apiVersion: specs.smi-spec.io/v1alpha1
 kind: TCPRoute
 metadata:
   name: service-tcp-route
+  namespace: <NAMESPACE>
 
 # TrafficTarget defines allowed routes for service-a
 # In this example service-a is allowed to connect using
@@ -14,14 +15,17 @@ apiVersion: access.smi-spec.io/v1alpha1
 metadata:
   name: service-targets
   namespace: <NAMESPACE>
+  # namespace: default
 destination:
   kind: ServiceAccount
   name: service-b
   namespace: <NAMESPACE>
+  # namespace: default
 sources:
 - kind: ServiceAccount
   name: service-a
   namespace: <NAMESPACE>
+  # namespace: default
 specs:
 - kind: TCPRoute
   name: service-tcp-route

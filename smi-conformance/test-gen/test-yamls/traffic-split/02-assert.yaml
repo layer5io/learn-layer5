@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-b
+  namespace: <NAMESPACE>
+spec:
+  type: NodePort
+  selector:
+    app: app
+    version: b
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    targetPort: 9091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-c
+  namespace: <NAMESPACE>
+spec:
+  type: NodePort
+  selector:
+    app: app
+    version: c
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    targetPort: 9091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-a
+  namespace: <NAMESPACE>
+spec:
+  type: NodePort
+  selector:
+    app: app-a
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    targetPort: 9091
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc
+  namespace: <NAMESPACE>
+spec:
+  type: NodePort
+  selector:
+    app: app
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9091
+    targetPort: 9091
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-a-deployment
+  namespace: <NAMESPACE>
+status:
+  readyReplicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-b-deployment
+  namespace: <NAMESPACE>
+status:
+  readyReplicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-c-deployment
+  namespace: <NAMESPACE>
+status:
+  readyReplicas: 1
