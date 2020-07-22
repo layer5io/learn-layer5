@@ -1,11 +1,3 @@
-# To check for smi conformance of a deployed service mesh
-We use kuttl to check for SMI conformance. All the tests are writtten in smi-test directory of this repository.
-Execute the following command in `./smi-conformance` to run the smi-conformace tests:-
-
-```shell
-go run main.go
-```
-
 <p style="text-align:center;" align="center">
   <img align="center" src="https://raw.githubusercontent.com/layer5io/layer5/master/assets/images/layer5/layer5-tag-white-bg.png" width="45%" /></p>
 
@@ -20,7 +12,8 @@ go run main.go
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3564/badge)](https://bestpractices.coreinfrastructure.org/projects/3564)
 
 <p style="clear:both;">
-<h2>Learn Layer5</h2>
+
+# Learn Layer5
 
 The Learn Layer5 sample application is to be available for use across all service meshes that Meshery supports and is to used as:
 
@@ -116,19 +109,43 @@ curl --location --request DELETE 'http://34.68.35.174:9091/metrics'
 
 > Note: metrics are collected only for `/call` and `/echo`.
 
+# Service Mesh Interface (SMI) Conformance
+The `learn-layer5` application serves as a sample application to validate the conformance of any service mesh with the SMI specifications. To verfiy SMI conformance, run Meshery and invoke the suite of SMI tests specific to the service mesh you would like to validate.
+
+## Testing with Meshery
+Meshery allows you to sechedule tests and invoke them programmatically. Meshery will store these test results and allow you to retrieve them later.
+
+## Testing Manually
+
+To manually invoke SMI Conformance test for a deployed service mesh, you can apply tests from the `smi-test` directory of this repository. Execute the following command to run the smi-conformace tests:
+
+# To check for smi conformance of a deployed service mesh
+We use kuttl to check for SMI conformance. All the tests are writtten in smi-test directory of this repository.
+Execute the following command in `./smi-conformance` to run the smi-conformace tests:-
+
+```shell
+go run main.go
+```
+
+<!--
+```shell
+kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
+```
+-->
+
 <br /><br /><p align="center"><i>If you’re using Learn Layer5 or if you like the project, please <a href="https://github.com/layer5io/meshery/stargazers">★</a> star this repository to show your support! 🤩</i></p>
 </p>
 
 <p style="clear:both;">
 <h2><a name="contributing"></a><a name="community"></a> <a href="http://slack.layer5.io">Community</a> and <a href="https://github.com/layer5io/layer5/blob/master/CONTRIBUTING.md">Contributing</a></h2>
-Our projects are community-built and welcome collaboration. 👍 Be sure to see the <a href="https://docs.google.com/document/d/17OPtDE_rdnPQxmk2Kauhm3GwXF1R5dZ3Cj8qZLKdo5E/edit">Layer5 Contributor Welcome Guide</a> for a tour of resources available to you and jump into our <a href="http://slack.layer5.io">Slack</a>! Contributors are expected to adhere to the <a href="https://github.com/cncf/foundation/blob/master/code-of-conduct.md">CNCF Code of Conduct</a>.
+Our projects are community-built and welcome collaboration. 👍 Be sure to see the <a href="https://docs.google.com/document/d/17OPtDE_rdnPQxmk2Kauhm3GwXF1R5dZ3Cj8qZLKdo5E/edit">Layer5 Community Welcome Guide</a> for a tour of resources available to you and jump into our <a href="http://slack.layer5.io">Slack</a>! Contributors are expected to adhere to the <a href="https://github.com/cncf/foundation/blob/master/code-of-conduct.md">CNCF Code of Conduct</a>.
 
 <a href="https://meshery.io/community"><img alt="Layer5 Service Mesh Community" src="img/readme/slack-128.png" style="margin-left:10px;padding-top:5px;" width="110px" align="right" /></a>
 
 <a href="http://slack.layer5.io"><img alt="Layer5 Service Mesh Community" src="img/readme/community.svg" style="margin-right:8px;padding-top:5px;" width="140px" align="left" /></a>
 
 <p>
-✔️ <em><strong>Join</strong></em> <a href="https://drive.google.com/open?id=1c07UO9dS7_tFD-ClCWHIrEzRnzUJoFQ10EzfJTpS7FY">weekly community meeting</a> on <a href="https://bit.ly/2SbrRhe">Fridays from 10am - 11am Central</a>.<br />
+✔️ <em><strong>Join</strong></em> any or all of the weekly meetings on the <a href="https://calendar.google.com/calendar/b/1?cid=bGF5ZXI1LmlvX2VoMmFhOWRwZjFnNDBlbHZvYzc2MmpucGhzQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20">community calendar</a>.<br />
 ✔️ <em><strong>Watch</strong></em> community <a href="https://www.youtube.com/channel/UCFL1af7_wdnhHXL1InzaMvA?sub_confirmation=1">meeting recordings</a>.<br />
 ✔️ <em><strong>Access</strong></em> the <a href="https://drive.google.com/drive/u/4/folders/0ABH8aabN4WAKUk9PVA">community drive</a>.<br />
 </p>
