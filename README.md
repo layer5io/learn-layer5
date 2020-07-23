@@ -13,7 +13,7 @@
 
 <p style="clear:both;">
 
-# Learn Layer5
+# Learn Layer5 (learn to service mesh)
 
 The Learn Layer5 sample application is to be available for use across all service meshes that Meshery supports and is to used as:
 
