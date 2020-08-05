@@ -120,7 +120,7 @@ Meshery allows you to schedule tests and invoke them programmatically. Meshery w
 To manually invoke SMI Conformance test for a deployed service mesh, you can apply tests from the `smi-test` directory of this repository. Execute the following command to run the smi-conformace tests:
 
 # To check for smi conformance of a deployed service mesh
-We use kuttl to check for SMI conformance. All the tests are written in smi-test directory of this repository.
+Meshery, the service mesh management plane, facililtates the execution and results gathering of these conformance tests. All the tests are written in `smi-test` directory of this repository.
 Execute the following command in `./smi-conformance` to run the smi-conformace tests:-
 
 ```shell
