@@ -1,0 +1,24 @@
+syntax = "proto3";
+package smi_conformance;
+
+option go_package = "conformance;conformance";
+
+message Request {
+    map<string, string> annotations=1;
+    string meshname=2;
+}
+
+message SingleTestResult {
+    string name =1;
+    string testCasesPassed =2;
+    string totalCases =3;
+    string message=4;
+}
+
+message Response {
+    repeated SingleTestResult singleTestResult=1;
+}
+
+service conformanceTesting{
+    rpc RunTest (Request) returns (Response);
+}

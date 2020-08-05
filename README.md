@@ -121,10 +121,11 @@ To manually invoke SMI Conformance test for a deployed service mesh, you can app
 
 # To check for smi conformance of a deployed service mesh
 Meshery, the service mesh management plane, facililtates the execution and results gathering of these conformance tests. All the tests are written in `smi-test` directory of this repository.
-Execute the following command in `./smi-conformance` to run the smi-conformace tests:-
+Build and run with the below commands to create a container for running the smi-conformace tests:-
 
 ```shell
-go run main.go
+docker build . -t meshery-smi-conformance:latest
+docker run -p 10008:10008 meshery-smi-conformance:latest
 ```
 
 <!--
