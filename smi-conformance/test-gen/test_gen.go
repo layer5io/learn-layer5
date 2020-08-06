@@ -11,20 +11,26 @@ import (
 	testutils "github.com/kudobuilder/kuttl/pkg/test/utils"
 )
 
-type Results []*Result
-
-type Result struct {
-	Name        string
-	Total       int
-	Passed      int
-	Failures    int
-	Elapsedtime string
-	Message     string
+type Results struct {
+	Tests    int    `json:"tests"`
+	Failures int    `json:"failures"`
+	Time     string `json:"time"`
+	Name     string `json:"name"`
+	Testcase []struct {
+		Classname  string `json:"classname"`
+		Name       string `json:"name"`
+		Time       string `json:"time"`
+		Assertions int    `json:"assertions"`
+		Failure    struct {
+			Text    string `json:"text"`
+			Message string `json:"message"`
+		} `json:"failure,omitempty"`
+	} `json:"testcase"`
 }
 
 func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 	manifestDirs := []string{}
-	result := make([]*Result, 0)
+	output := Results{}
 	results := &report.Testsuites{}
 
 	// Run all testCases
@@ -35,10 +41,10 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 	startKIND := false
 	options := harness.TestSuite{}
 
-	args := []string{"./test-gen/test-yamls/"}
+	args := []string{"./test-yamls/"}
 
 	options.TestDirs = args
-	options.Timeout = 120
+	options.Timeout = 30
 	options.Parallel = 1
 	options.TestDirs = manifestDirs
 	options.StartKIND = startKIND
@@ -78,22 +84,15 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 
 		s, _ := json.MarshalIndent(options, "", "  ")
 		fmt.Printf("Running integration tests with following options:\n%s\n", string(s))
-		results := harness.Run()
+		results = harness.Run()
 		data, _ := json.Marshal(results)
 		// Results of the test
 		fmt.Printf("Results :\n%v\n", string(data))
+		err := json.Unmarshal([]byte(data), &output)
+		if err != nil {
+			fmt.Printf("Unable to unmarshal results")
+		}
 	})
 
-	for _, res := range results.Testsuite {
-		result = append(result, &Result{
-			Name:        res.Name,
-			Total:       res.Tests,
-			Passed:      res.Tests - res.Failures,
-			Failures:    res.Failures,
-			Elapsedtime: res.Time,
-			Message:     "",
-		})
-	}
-
-	return result
+	return output
 }
