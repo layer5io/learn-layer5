@@ -14,8 +14,8 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates && mkdir /home/test-yamls && mkdir /home/test-yamls/traffic-access && mkdir /home/test-yamls/traffic-spec && mkdir /home/test-yamls/traffic-split
 COPY --from=build-img /home/meshery/** /home/
 COPY --from=build-img /go/src/github.com/layer5io/learn-layer5/smi-conformance/test-gen/test-yamls/traffic-access/** /home/test-yamls/traffic-access/
-COPY --from=build-img /go/src/github.com/layer5io/learn-layer5/smi-conformance/test-gen/test-yamls/test-split/** /home/test-yamls/traffic-split/
-COPY --from=build-img /go/src/github.com/layer5io/learn-layer5/smi-conformance/test-gen/test-yamls/test-spec/** /home/test-yamls/traffic-spec/
+COPY --from=build-img /go/src/github.com/layer5io/learn-layer5/smi-conformance/test-gen/test-yamls/traffic-split/** /home/test-yamls/traffic-split/
+COPY --from=build-img /go/src/github.com/layer5io/learn-layer5/smi-conformance/test-gen/test-yamls/traffic-spec/** /home/test-yamls/traffic-spec/
 WORKDIR /home/
 EXPOSE 10008
 CMD ["sh","-c","./smi_conformance"]
