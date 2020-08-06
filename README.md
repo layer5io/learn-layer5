@@ -110,11 +110,16 @@ curl --location --request DELETE 'http://34.68.35.174:9091/metrics'
 > Note: metrics are collected only for `/call` and `/echo`.
 
 # Service Mesh Interface (SMI) Conformance
-The `learn-layer5` application serves as a sample application to validate the conformance of any service mesh with the SMI specifications. To verify SMI conformance, run Meshery and invoke the suite of SMI tests specific to the service mesh you would like to validate.
+The `learn-layer5` application serves as a sample application to validate the conformance of any service mesh with the SMI specifications. To verify SMI conformance, run Meshery and the Meshery adapter for the specific service mesh you wish to test. Invoke the suite of SMI conformance tests on the specific service mesh you would like to validate.
 
-## Testing with Meshery
-Meshery allows you to schedule tests and invoke them programmatically. Meshery will store these test results and allow you to retrieve them later.
+## Invoking conformance tests
 
+**As a Service Mesh user**
+Meshery allows you to schedule tests and invoke them programmatically. Meshery will store these test results and allow you to retrieve them later. 
+
+**As a Service Mesh maker**
+Meshery guarantees provenance of these tests and facilitates the public publicing of this suite of tests results into a versioned, public matrix of conformance status (consisting of both supported capabilities and test compliance).
+<!--
 ## Testing Manually
 
 To manually invoke SMI Conformance test for a deployed service mesh, you can apply tests from the `smi-test` directory of this repository. Execute the following command to run the smi-conformace tests:
@@ -128,7 +133,7 @@ docker build . -t meshery-smi-conformance:latest
 docker run -p 10008:10008 meshery-smi-conformance:latest
 ```
 
-<!--
+
 ```shell
 kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
 ```
