@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/layer5io/learn-layer5/smi-conformance/conformance"
@@ -34,16 +35,22 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	}
 
 	result := test_gen.RunTest(config, req.Annotations)
-	for _, res := range result {
+	fmt.Printf("%+v\n", result)
+	for _, res := range result.Testcase {
 		results = append(results, &conformance.SingleTestResult{
-			Name:            res.Name,
-			TestCasesPassed: strconv.Itoa(res.Passed),
-			TotalCases:      strconv.Itoa(res.Total),
-			Message:         res.Message,
+			Name:       res.Name,
+			Time:       res.Time,
+			Assertions: strconv.Itoa(res.Assertions),
+			Failure: &conformance.Failure{
+				Test:    res.Failure.Text,
+				Message: res.Failure.Message,
+			},
 		})
 	}
 
 	return &conformance.Response{
+		Tests:            strconv.Itoa(result.Tests),
+		Failures:         strconv.Itoa(result.Failures),
 		SingleTestResult: results,
 	}, nil
 }

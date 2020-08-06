@@ -5,18 +5,25 @@ option go_package = "conformance;conformance";
 
 message Request {
     map<string, string> annotations=1;
-    string meshname=2;
+    string meshname = 2;
 }
 
 message SingleTestResult {
-    string name =1;
-    string testCasesPassed =2;
-    string totalCases =3;
-    string message=4;
+    string name = 1;
+    string time = 2;
+    string assertions = 3;
+    Failure failure = 4;
+}
+
+message Failure {
+	string test = 1;
+    string message = 2;
 }
 
 message Response {
-    repeated SingleTestResult singleTestResult=1;
+	string tests = 1;
+	string failures = 2;
+    repeated SingleTestResult singleTestResult=3;
 }
 
 service conformanceTesting{
