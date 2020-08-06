@@ -28,7 +28,7 @@ type Results struct {
 	} `json:"testcase"`
 }
 
-func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
+func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Results {
 	manifestDirs := []string{}
 	output := Results{}
 	results := &report.Testsuites{}
@@ -77,6 +77,7 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 			T:                    t,
 			SuiteCustomTests:     testHandlers,
 			NamespaceAnnotations: annotations,
+			NamespaceLabels:      labels,
 		}
 
 		// Runs the test using the inCluster kubeConfig (runs only when the code is running inside the pod)
