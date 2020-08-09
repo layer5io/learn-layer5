@@ -2,7 +2,7 @@ module github.com/layer5io/learn-layer5/smi-conformance
 
 go 1.13
 
-replace github.com/kudobuilder/kuttl => github.com/layer5io/kuttl v0.4.1-0.20200723152044-916f10574334
+replace github.com/kudobuilder/kuttl => github.com/layer5io/kuttl v0.4.1-0.20200806180306-b7e46afd657f
 
 require (
 	github.com/golang/protobuf v1.4.2

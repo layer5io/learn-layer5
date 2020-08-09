@@ -29,7 +29,7 @@ type Results struct {
 	} `json:"testcase"`
 }
 
-func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
+func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Results {
 
 	c := make(chan Results)
 	go func() {
@@ -58,14 +58,6 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 			options.KINDContext = harness.DefaultKINDContext
 		}
 
-		if len(args) != 0 {
-			options.TestDirs = args
-		}
-
-		// annotations := make(map[string]string)
-		// Namespace Injection
-		// annotations["linkerd.io/inject"] = "enabled"
-
 		serviceMeshConfObj := SMIConformance{
 			SMObj: meshConfig,
 		}
@@ -81,7 +73,15 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 				T:                    t,
 				SuiteCustomTests:     testHandlers,
 				NamespaceAnnotations: annotations,
+				NamespaceLabels:      labels,
 			}
+			if len(args) != 0 {
+				options.TestDirs = args
+			}
+
+			// annotations := make(map[string]string)
+			// Namespace Injection
+			// annotations["linkerd.io/inject"] = "enabled"
 
 			// Runs the test using the inCluster kubeConfig (runs only when the code is running inside the pod)
 			harness.InCluster = true
