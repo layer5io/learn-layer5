@@ -29,14 +29,10 @@ type Results struct {
 	} `json:"testcase"`
 }
 
-<<<<<<< HEAD
 func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Results {
 	manifestDirs := []string{}
 	output := Results{}
 	results := &report.Testsuites{}
-=======
-func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
->>>>>>> 4ac32010a115d1a96483e11b380fbc97259d70fd
 
 	c := make(chan Results)
 	go func() {
@@ -64,37 +60,7 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 		if options.KINDContext == "" {
 			options.KINDContext = harness.DefaultKINDContext
 		}
-
-<<<<<<< HEAD
-	testHandlers := make(map[string]map[string]test.CustomTest)
-	testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
-	testHandlers["traffic-spec"] = serviceMeshConfObj.TrafficSpecGetTests()
-	testHandlers["traffic-split"] = serviceMeshConfObj.TrafficSplitGetTests()
-
-	testutils.RunTests("kudo", testToRun, options.Parallel, func(t *testing.T) {
-		harness := test.Harness{
-			TestSuite:            options,
-			T:                    t,
-			SuiteCustomTests:     testHandlers,
-			NamespaceAnnotations: annotations,
-			NamespaceLabels:      labels,
-=======
-		if len(args) != 0 {
-			options.TestDirs = args
->>>>>>> 4ac32010a115d1a96483e11b380fbc97259d70fd
-		}
-		if len(args) != 0 {
-			options.TestDirs = args
-		}
-
-		// annotations := make(map[string]string)
-		// Namespace Injection
-		// annotations["linkerd.io/inject"] = "enabled"
-
-		serviceMeshConfObj := SMIConformance{
-			SMObj: meshConfig,
-		}
-
+    
 		testHandlers := make(map[string]map[string]test.CustomTest)
 		testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
 		testHandlers["traffic-spec"] = serviceMeshConfObj.TrafficSpecGetTests()
@@ -106,7 +72,24 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 				T:                    t,
 				SuiteCustomTests:     testHandlers,
 				NamespaceAnnotations: annotations,
+				NamespaceLabels:      labels,
 			}
+			if len(args) != 0 {
+				options.TestDirs = args
+			}
+
+			// annotations := make(map[string]string)
+			// Namespace Injection
+			// annotations["linkerd.io/inject"] = "enabled"
+
+			serviceMeshConfObj := SMIConformance{
+				SMObj: meshConfig,
+			}
+
+			testHandlers := make(map[string]map[string]test.CustomTest)
+			testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
+			testHandlers["traffic-spec"] = serviceMeshConfObj.TrafficSpecGetTests()
+			testHandlers["traffic-split"] = serviceMeshConfObj.TrafficSplitGetTests()
 
 			// Runs the test using the inCluster kubeConfig (runs only when the code is running inside the pod)
 			harness.InCluster = true
