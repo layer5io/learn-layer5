@@ -60,7 +60,7 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 		if options.KINDContext == "" {
 			options.KINDContext = harness.DefaultKINDContext
 		}
-
+    
 		testHandlers := make(map[string]map[string]test.CustomTest)
 		testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
 		testHandlers["traffic-spec"] = serviceMeshConfObj.TrafficSpecGetTests()
