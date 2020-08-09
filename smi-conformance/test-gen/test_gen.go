@@ -83,6 +83,9 @@ func RunTest(meshConfig ServiceMesh, annotations map[string]string) Results {
 			options.TestDirs = args
 >>>>>>> 4ac32010a115d1a96483e11b380fbc97259d70fd
 		}
+		if len(args) != 0 {
+			options.TestDirs = args
+		}
 
 		// annotations := make(map[string]string)
 		// Namespace Injection

@@ -33,7 +33,6 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	var config test_gen.ServiceMesh
 
 	config = linkerdConfig
-	labels := make(map[string]string)
 	switch req.Meshname {
 	case "linkerd":
 		config = linkerdConfig
@@ -41,10 +40,10 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	case "maesh":
 		config = maeshConfig
 	case "istio":
-		labels["istio-injection"] = "enabled"
+		req.Labels["istio-injection"] = "enabled"
 	}
 
-	result := test_gen.RunTest(config, req.Annotations, labels)
+	result := test_gen.RunTest(config, req.Annotations, req.Labels)
 	fmt.Printf("%+v\n", result)
 	for _, res := range result.Testcase {
 		results = append(results, &conformance.SingleTestResult{
