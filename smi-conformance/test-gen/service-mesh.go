@@ -78,3 +78,63 @@ func (sm Linkerd) SvcBGetPort() string {
 func (sm Linkerd) SvcCGetPort() string {
 	return sm.PortSvcC
 }
+
+type Istio struct {
+	PortSvcA string
+	PortSvcB string
+	PortSvcC string
+}
+
+func (sm Istio) SvcAGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s..svc.cluster.local.:%s", SERVICE_A_NAME, namespace, sm.PortSvcA)
+}
+
+func (sm Istio) SvcBGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s..svc.cluster.local.:%s", SERVICE_B_NAME, namespace, sm.PortSvcB)
+}
+
+func (sm Istio) SvcCGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s..svc.cluster.local.:%s", SERVICE_C_NAME, namespace, sm.PortSvcC)
+}
+
+func (sm Istio) SvcAGetPort() string {
+	return sm.PortSvcA
+}
+
+func (sm Istio) SvcBGetPort() string {
+	return sm.PortSvcB
+}
+
+func (sm Istio) SvcCGetPort() string {
+	return sm.PortSvcC
+}
+
+type OSM struct {
+	PortSvcA string
+	PortSvcB string
+	PortSvcC string
+}
+
+func (sm OSM) SvcAGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s..svc.cluster.local.:%s", SERVICE_A_NAME, namespace, sm.PortSvcA)
+}
+
+func (sm OSM) SvcBGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s..svc.cluster.local.:%s", SERVICE_B_NAME, namespace, sm.PortSvcB)
+}
+
+func (sm OSM) SvcCGetInternalName(namespace string) string {
+	return fmt.Sprintf("http://%s.%s..svc.cluster.local.:%s", SERVICE_C_NAME, namespace, sm.PortSvcC)
+}
+
+func (sm OSM) SvcAGetPort() string {
+	return sm.PortSvcA
+}
+
+func (sm OSM) SvcBGetPort() string {
+	return sm.PortSvcB
+}
+
+func (sm OSM) SvcCGetPort() string {
+	return sm.PortSvcC
+}
