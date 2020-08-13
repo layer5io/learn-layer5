@@ -79,10 +79,6 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 				options.TestDirs = args
 			}
 
-			// annotations := make(map[string]string)
-			// Namespace Injection
-			// annotations["linkerd.io/inject"] = "enabled"
-
 			// Runs the test using the inCluster kubeConfig (runs only when the code is running inside the pod)
 			harness.InCluster = true
 

@@ -21,7 +21,12 @@ var (
 		PortSvcB: "9091",
 		PortSvcC: "9091",
 	}
-	istioConfig = &test_gen.Linkerd{
+	istioConfig = &test_gen.Istio{
+		PortSvcA: "9091",
+		PortSvcB: "9091",
+		PortSvcC: "9091",
+	}
+	osmConfig = &test_gen.OSM{
 		PortSvcA: "9091",
 		PortSvcB: "9091",
 		PortSvcC: "9091",
@@ -40,7 +45,11 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	case "maesh":
 		config = maeshConfig
 	case "istio":
+		config = istioConfig
 		req.Labels["istio-injection"] = "enabled"
+	case "osm":
+		config = osmConfig
+		req.Labels["openservicemesh.io/monitored-by"] = "osm"
 	}
 
 	result := test_gen.RunTest(config, req.Annotations, req.Labels)
