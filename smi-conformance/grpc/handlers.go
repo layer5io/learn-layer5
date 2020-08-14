@@ -54,7 +54,7 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 
 	result := test_gen.RunTest(config, req.Annotations, req.Labels)
 	fmt.Printf("%+v\n", result)
-	for _, res := range result.Testcase {
+	for _, res := range result.Testsuite[0].Testcase {
 		results = append(results, &conformance.SingleTestResult{
 			Name:       res.Name,
 			Time:       res.Time,
