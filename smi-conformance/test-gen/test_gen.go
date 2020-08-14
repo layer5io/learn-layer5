@@ -62,6 +62,10 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 			SMObj: meshConfig,
 		}
 
+		if len(args) != 0 {
+			options.TestDirs = args
+		}
+
 		testHandlers := make(map[string]map[string]test.CustomTest)
 		testHandlers["traffic-access"] = serviceMeshConfObj.TrafficAccessGetTests()
 		testHandlers["traffic-spec"] = serviceMeshConfObj.TrafficSpecGetTests()
@@ -74,9 +78,6 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 				SuiteCustomTests:     testHandlers,
 				NamespaceAnnotations: annotations,
 				NamespaceLabels:      labels,
-			}
-			if len(args) != 0 {
-				options.TestDirs = args
 			}
 
 			// Runs the test using the inCluster kubeConfig (runs only when the code is running inside the pod)
