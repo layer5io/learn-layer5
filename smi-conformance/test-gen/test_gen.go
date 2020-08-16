@@ -54,11 +54,11 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 		args := []string{"./test-yamls/"}
 
 		options.TestDirs = args
-		options.Timeout = 30
+		options.Timeout = 120
 		options.Parallel = 1
 		options.TestDirs = manifestDirs
 		options.StartKIND = startKIND
-		options.SkipDelete = true
+		options.SkipDelete = false
 
 		if options.KINDContext == "" {
 			options.KINDContext = harness.DefaultKINDContext
@@ -100,7 +100,7 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 				fmt.Printf("Unable to unmarshal results")
 			}
 			c <- output
-			time.Sleep(5 * time.Second)
+			time.Sleep(30 * time.Second)
 		})
 	}()
 	select {
