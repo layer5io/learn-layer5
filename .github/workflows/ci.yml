@@ -32,14 +32,14 @@ jobs:
         docker tag ${{ secrets.IMAGE_NAME }}:latest ${{ secrets.IMAGE_NAME }}:${GITHUB_SHA::6}
         docker push ${{ secrets.IMAGE_NAME }}:latest
         docker push ${{ secrets.IMAGE_NAME }}:${GITHUB_SHA::6}
-        cd ../smi-conformance && docker build --no-cache -t smi-conformance:latest .
-        docker tag smi-conformance:latest smi-conformance:${GITHUB_SHA::6}
-        docker push smi-conformance:latest
-        docker push smi-conformance:${GITHUB_SHA::6}
+        cd ../smi-conformance && docker build --no-cache -t ${{ secrets.IMAGE_NAME }}:smi .
+        docker tag ${{ secrets.IMAGE_NAME }}:smi ${{ secrets.IMAGE_NAME }}:smi-${GITHUB_SHA::6}
+        docker push ${{ secrets.IMAGE_NAME }}:smi
+        docker push ${{ secrets.IMAGE_NAME }}:smi-${GITHUB_SHA::6}
     - name: Docker tag release & push
       if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') && success()
       run: |
         docker tag ${{ secrets.IMAGE_NAME }}:latest ${{ secrets.IMAGE_NAME }}:${GITHUB_REF/refs\/tags\//}
         docker push ${{ secrets.IMAGE_NAME }}:${GITHUB_REF/refs\/tags\//}
-        docker tag smi-conformance:latest smi-conformance:${GITHUB_REF/refs\/tags\//}
-        docker push smi-conformance:${GITHUB_REF/refs\/tags\//}
+        docker tag ${{ secrets.IMAGE_NAME }}:smi ${{ secrets.IMAGE_NAME }}:smi-${GITHUB_REF/refs\/tags\//}
+        docker push ${{ secrets.IMAGE_NAME }}:smi-${GITHUB_REF/refs\/tags\//}

@@ -13,20 +13,26 @@ import (
 )
 
 type Results struct {
-	Tests    int    `json:"tests"`
-	Failures int    `json:"failures"`
-	Time     string `json:"time"`
-	Name     string `json:"name"`
-	Testcase []struct {
-		Classname  string `json:"classname"`
-		Name       string `json:"name"`
-		Time       string `json:"time"`
-		Assertions int    `json:"assertions"`
-		Failure    struct {
-			Text    string `json:"text"`
-			Message string `json:"message"`
-		} `json:"failure,omitempty"`
-	} `json:"testcase"`
+	Name      string `json:"name"`
+	Tests     int    `json:"tests"`
+	Failures  int    `json:"failures"`
+	Time      string `json:"time"`
+	Testsuite []struct {
+		Tests    int    `json:"tests"`
+		Failures int    `json:"failures"`
+		Time     string `json:"time"`
+		Name     string `json:"name"`
+		Testcase []struct {
+			Classname  string `json:"classname"`
+			Name       string `json:"name"`
+			Time       string `json:"time"`
+			Assertions int    `json:"assertions"`
+			Failure    struct {
+				Text    string `json:"text"`
+				Message string `json:"message"`
+			} `json:"failure"`
+		} `json:"testcase"`
+	} `json:"testsuite"`
 }
 
 func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Results {
@@ -48,11 +54,11 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 		args := []string{"./test-yamls/"}
 
 		options.TestDirs = args
-		options.Timeout = 30
+		options.Timeout = 300
 		options.Parallel = 1
 		options.TestDirs = manifestDirs
 		options.StartKIND = startKIND
-		options.SkipDelete = true
+		options.SkipDelete = false
 
 		if options.KINDContext == "" {
 			options.KINDContext = harness.DefaultKINDContext
@@ -60,6 +66,10 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 
 		serviceMeshConfObj := SMIConformance{
 			SMObj: meshConfig,
+		}
+
+		if len(args) != 0 {
+			options.TestDirs = args
 		}
 
 		testHandlers := make(map[string]map[string]test.CustomTest)
@@ -75,13 +85,6 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 				NamespaceAnnotations: annotations,
 				NamespaceLabels:      labels,
 			}
-			if len(args) != 0 {
-				options.TestDirs = args
-			}
-
-			// annotations := make(map[string]string)
-			// Namespace Injection
-			// annotations["linkerd.io/inject"] = "enabled"
 
 			// Runs the test using the inCluster kubeConfig (runs only when the code is running inside the pod)
 			harness.InCluster = true
@@ -97,7 +100,7 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 				fmt.Printf("Unable to unmarshal results")
 			}
 			c <- output
-			time.Sleep(5 * time.Second)
+			time.Sleep(30 * time.Second)
 		})
 	}()
 	select {
