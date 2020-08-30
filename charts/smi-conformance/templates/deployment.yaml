@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "smi-conformance.fullname" . }}
+  name: {{ include "smi-conformance.name" . }}
   namespace: {{ include "smi-conformance.namespace" . }}
   labels:
     {{- include "smi-conformance.labels" . | nindent 4 }}

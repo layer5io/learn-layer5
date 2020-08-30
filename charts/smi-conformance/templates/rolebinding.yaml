@@ -2,11 +2,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "smi-conformance.fullname" . }}
+  name: {{ include "smi-conformance.name" . }}
   namespace: meshery
 subjects:
 - kind: ServiceAccount
-  name: {{ include "smi-conformance.fullname" . }}
+  name: {{ include "smi-conformance.name" . }}
   namespace: {{ include "smi-conformance.namespace" . }}
 roleRef:
   kind: ClusterRole
