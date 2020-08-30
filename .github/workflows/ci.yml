@@ -51,11 +51,6 @@ jobs:
         uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - name: Run chart-testing (lint)
-        uses: helm/chart-testing-action@master
-        with:
-          command: lint
-          config: .github/workflows/ct.yaml
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
