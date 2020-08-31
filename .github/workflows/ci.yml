@@ -43,3 +43,22 @@ jobs:
         docker push ${{ secrets.IMAGE_NAME }}:${GITHUB_REF/refs\/tags\//}
         docker tag ${{ secrets.IMAGE_NAME }}:smi ${{ secrets.IMAGE_NAME }}:smi-${GITHUB_REF/refs\/tags\//}
         docker push ${{ secrets.IMAGE_NAME }}:smi-${GITHUB_REF/refs\/tags\//}
+  helm:
+    name: Helm charts publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.0.0
+        with:
+          version: ${GITHUB_REF/refs\/tags\//}
+          charts_repo_url: https://layer5.github.io/smi-conformance
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

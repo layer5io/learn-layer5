@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "smi-conformance.name" . }}
+  namespace: {{ include "smi-conformance.namespace" . }}
+  labels:
+    {{- include "smi-conformance.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: {{ include "smi-conformance.name" . }}
+  selector:
+    {{- include "smi-conformance.labels" . | nindent 4 }}

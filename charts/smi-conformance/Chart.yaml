@@ -1,0 +1,3 @@
+Name: smi-conformance
+description: A Helm chart to install the SMI conformance tool on Kubernetes
+version: 0.1.0

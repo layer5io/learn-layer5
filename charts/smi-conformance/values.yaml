@@ -1,0 +1,20 @@
+namespace: meshery
+serviceAccount: meshery
+labels:
+  app: smi-conformance
+  release: smi-conformance
+image:
+  repository: layer5/learn-layer5
+  tag: smi
+  pullPolicy: Always
+  port: 10008
+resources:
+  limits:
+    cpu: "500m"
+    memory: 1000Mi
+  requests:
+    cpu: "200m"
+    memory: 500Mi
+service:
+  type: NodePort
+  port: 10008
