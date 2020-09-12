@@ -13,7 +13,7 @@ func main() {
 
 	service := &grpc.Service{
 		Name:      "smi-conformance",
-		Port:      "10008",
+		Port:      "10011",
 		Version:   "v1.0.0",
 		StartedAt: time.Now(),
 	}
