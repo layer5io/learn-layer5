@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/layer5io/learn-layer5/smi-conformance/conformance"
@@ -34,7 +33,6 @@ var (
 )
 
 func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*conformance.Response, error) {
-	results := make([]*conformance.SingleTestResult, 0)
 	var config test_gen.ServiceMesh
 
 	config = linkerdConfig
@@ -53,22 +51,27 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	}
 
 	result := test_gen.RunTest(config, req.Annotations, req.Labels)
-	fmt.Printf("%+v\n", result)
+	totalcases := 3
+	failures := 0
+
+	details := make([]*conformance.Detail, 0)
 	for _, res := range result.Testsuite[0].Testcase {
-		results = append(results, &conformance.SingleTestResult{
-			Name:       res.Name,
+		d := &conformance.Detail{
+			Smispec:    res.Name,
 			Time:       res.Time,
 			Assertions: strconv.Itoa(res.Assertions),
-			Failure: &conformance.Failure{
-				Test:    res.Failure.Text,
-				Message: res.Failure.Message,
-			},
-		})
+		}
+		if len(res.Failure.Text) > 2 {
+			d.Reason = res.Failure.Text
+			d.Result = res.Failure.Message
+			failures += 1
+		}
+		details = append(details, d)
 	}
 
 	return &conformance.Response{
-		Tests:            strconv.Itoa(result.Tests),
-		Failures:         strconv.Itoa(result.Failures),
-		SingleTestResult: results,
+		Casespassed: strconv.Itoa(totalcases - failures),
+		Capability:  strconv.Itoa(((totalcases - failures) / totalcases) * 100),
+		Details:     details,
 	}, nil
 }
