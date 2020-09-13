@@ -59,6 +59,6 @@ jobs:
         uses: helm/chart-releaser-action@v1.0.0
         with:
           version: ${GITHUB_REF/refs\/tags\//}
-          charts_repo_url: https://layer5.github.io/smi-conformance
+          charts_repo_url: https://layer5.github.io/
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
