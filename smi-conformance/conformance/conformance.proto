@@ -4,27 +4,24 @@ package smi_conformance;
 option go_package = "conformance;conformance";
 
 message Request {
-    map<string, string> annotations=1;
-    map<string, string> labels=2;
-    string meshname = 3;
+    string meshname = 1;
+    map<string, string> annotations = 2;
+    map<string, string> labels = 3;
+    string meshversion = 4;
 }
 
-message SingleTestResult {
-    string name = 1;
+message Detail {
+    string smispec = 1;
     string time = 2;
     string assertions = 3;
-    Failure failure = 4;
-}
-
-message Failure {
-	string test = 1;
-    string message = 2;
+    string result = 4;
+    string reason = 5;
 }
 
 message Response {
-	string tests = 1;
-	string failures = 2;
-    repeated SingleTestResult singleTestResult=3;
+	string capability = 1;
+    string casespassed = 2;
+    repeated Detail details = 3;
 }
 
 service conformanceTesting{

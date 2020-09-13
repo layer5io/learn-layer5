@@ -12,27 +12,29 @@ import (
 	testutils "github.com/kudobuilder/kuttl/pkg/test/utils"
 )
 
+type Failure struct {
+	Text    string `json:"text,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
 type Results struct {
-	Name      string `json:"name"`
-	Tests     int    `json:"tests"`
-	Failures  int    `json:"failures"`
-	Time      string `json:"time"`
+	Name      string `json:"name,omitempty"`
+	Tests     int    `json:"tests,omitempty"`
+	Failures  int    `json:"failures,omitempty"`
+	Time      string `json:"time,omitempty"`
 	Testsuite []struct {
-		Tests    int    `json:"tests"`
-		Failures int    `json:"failures"`
-		Time     string `json:"time"`
-		Name     string `json:"name"`
+		Tests    int    `json:"tests,omitempty"`
+		Failures int    `json:"failures,omitempty"`
+		Time     string `json:"time,omitempty"`
+		Name     string `json:"name,omitempty"`
 		Testcase []struct {
-			Classname  string `json:"classname"`
-			Name       string `json:"name"`
-			Time       string `json:"time"`
-			Assertions int    `json:"assertions"`
-			Failure    struct {
-				Text    string `json:"text"`
-				Message string `json:"message"`
-			} `json:"failure"`
-		} `json:"testcase"`
-	} `json:"testsuite"`
+			Classname  string  `json:"classname,omitempty"`
+			Name       string  `json:"name,omitempty"`
+			Time       string  `json:"time,omitempty"`
+			Assertions int     `json:"assertions,omitempty"`
+			Failure    Failure `json:"failure,omitempty"`
+		} `json:"testcase,omitempty"`
+	} `json:"testsuite,omitempty"`
 }
 
 func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Results {
