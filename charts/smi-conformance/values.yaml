@@ -7,7 +7,7 @@ image:
   repository: layer5/learn-layer5
   tag: smi
   pullPolicy: Always
-  port: 10008
+  port: 10011
 resources:
   limits:
     cpu: "500m"
@@ -17,4 +17,4 @@ resources:
     memory: 500Mi
 service:
   type: NodePort
-  port: 10008
+  port: 10011
