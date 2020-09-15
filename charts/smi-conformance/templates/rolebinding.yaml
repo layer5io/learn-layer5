@@ -6,7 +6,7 @@ metadata:
   namespace: meshery
 subjects:
 - kind: ServiceAccount
-  name: {{ include "smi-conformance.name" . }}
+  name: {{ include "smi-conformance.serviceAccount" . }}
   namespace: {{ include "smi-conformance.namespace" . }}
 roleRef:
   kind: ClusterRole
