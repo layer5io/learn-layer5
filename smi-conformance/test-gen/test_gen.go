@@ -50,16 +50,15 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 		// Run only traffic-split
 		// testToRun := "traffic-split"
 
-		startKIND := false
 		options := harness.TestSuite{}
 
 		args := []string{"./test-yamls/"}
 
 		options.TestDirs = args
-		options.Timeout = 300
+		options.Timeout = 120
 		options.Parallel = 1
 		options.TestDirs = manifestDirs
-		options.StartKIND = startKIND
+		options.StartKIND = false
 		options.SkipDelete = false
 
 		if options.KINDContext == "" {
