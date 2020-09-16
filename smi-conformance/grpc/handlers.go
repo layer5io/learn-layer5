@@ -60,18 +60,25 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 			Smispec:    res.Name,
 			Time:       res.Time,
 			Assertions: strconv.Itoa(res.Assertions),
+			Capability: "Full",
+			Status:     "Passing",
 		}
 		if len(res.Failure.Text) > 2 {
 			d.Reason = res.Failure.Text
 			d.Result = res.Failure.Message
+			d.Status = "Failing"
+			d.Capability = "None"
 			failures += 1
+			if (res.Assertions - failures) > (res.Assertions / 2) {
+				d.Capability = "Half"
+			}
 		}
 		details = append(details, d)
 	}
 
 	return &conformance.Response{
 		Casespassed: strconv.Itoa(totalcases - failures),
-		Capability:  strconv.Itoa(((totalcases - failures) / totalcases) * 100),
+		Passpercent: strconv.Itoa(((totalcases - failures) / totalcases) * 100),
 		Details:     details,
 	}, nil
 }
