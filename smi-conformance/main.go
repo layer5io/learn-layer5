@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/kumarabd/gokit/logger"
+	"github.com/layer5io/gokit/logger"
 	"github.com/layer5io/learn-layer5/smi-conformance/grpc"
 )
 
