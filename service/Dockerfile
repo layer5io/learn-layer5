@@ -1,10 +1,10 @@
-FROM golang:1.13.5 as bd
+FROM golang:1.13.7 as bd
 WORKDIR /github.com/layer5io/sample-app-service
 ADD . .
-RUN GOPROXY=direct GOSUMDB=off go build -a -o ./main .
+RUN go build -a -o ./main .
 
-FROM alpine:latest
-COPY --from=bd /github.com/layer5io/sample-app-service/** /home/
+FROM golang:1.13.7
+COPY --from=bd /github.com/layer5io/sample-app-service/main /home/main
 WORKDIR /home/
 EXPOSE 9091
 CMD ["./main"]
