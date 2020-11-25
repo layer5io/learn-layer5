@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/layer5io/gokit/logger"
 	"github.com/layer5io/learn-layer5/smi-conformance/grpc"
-	"github.com/layer5io/meshkit/logger"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 	log.Info("Conformance tool Started")
 	err = grpc.Start(service)
 	if err != nil {
-		log.Error(err)
+		log.Err("Conformance tool crashed!!", err.Error())
 		os.Exit(1)
 	}
 }

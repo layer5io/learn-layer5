@@ -1,9 +1,8 @@
-package main
+package conformance
 
 import (
 	context "context"
 
-	"github.com/layer5io/learn-layer5/smi-conformance/proto"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -30,7 +29,7 @@ func CreateClient(ctx context.Context, conformanceLocationURL string) (*Conforma
 		logrus.Errorf("fail to dial: %v", err)
 	}
 
-	cClient := proto.NewConformanceTestingClient(conn)
+	cClient := NewConformanceTestingClient(conn)
 
 	return &ConformanceClient{
 		conn:    conn,
