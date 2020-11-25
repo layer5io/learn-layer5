@@ -11,7 +11,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/layer5io/learn-layer5/smi-conformance/conformance"
+	"github.com/layer5io/learn-layer5/smi-conformance/proto"
 )
 
 // Service object holds all the information about the server parameters.
@@ -48,7 +48,7 @@ func Start(s *Service) error {
 	)
 
 	//Register Proto
-	conformance.RegisterConformanceTestingServer(server, s)
+	proto.RegisterConformanceTestingServer(server, s)
 
 	// Start serving requests
 	if err = server.Serve(listener); err != nil {
