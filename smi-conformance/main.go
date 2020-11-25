@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/layer5io/learn-layer5/smi-conformance/grpc"
-	"github.com/layer5io/meshkit/logger"
 )
 
 func main() {
@@ -18,18 +17,11 @@ func main() {
 		StartedAt: time.Now(),
 	}
 
-	// Initialize Logger instance
-	log, err := logger.New(service.Name)
-	if err != nil {
-		fmt.Println("Logger Init Failed", err.Error())
-		os.Exit(1)
-	}
-
 	// Server Initialization
-	log.Info("Conformance tool Started")
-	err = grpc.Start(service)
+	fmt.Println("Conformance tool Started")
+	err := grpc.Start(service)
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }

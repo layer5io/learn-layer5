@@ -1,23 +1,41 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "meshkit/protobuf/common/error.proto";
-import "meshkit/protobuf/controller/info.proto";
-import "meshkit/protobuf/controller/health.proto";
 package proto;
 
 option go_package = "proto;proto";
+
+// --- imports --
+
+message ControllerInfo {
+    string name = 1;
+    string version = 2;
+}
+
+enum ControllerStatus {
+    RUNNING = 0;
+    IDLE = 1;
+}
+
+message ControllerHealth {
+    ControllerStatus status = 1;
+}
+
+message CommonError {
+    string code = 1;
+    string severity = 2;
+    string shortDescription = 3;
+    string longDescription = 4;
+    string probableCause = 5;
+    string suggestedRemediation = 6;
+}
+
+//
 
 enum Capability {
     FULL = 0;
     HALF = 1;
     NONE = 2;
-}
-
-enum TestStatus {
-    COMPLETED = 0;
-    INPROGRESS = 1;
-    CRASHED = 2;
 }
 
 enum ResultStatus {
@@ -39,7 +57,7 @@ message Request {
 message Result {
   oneof result {
     string message = 1;
-    common.CommonError error = 2;
+    CommonError error = 2;
   }
 }
 
@@ -49,7 +67,7 @@ message Detail {
     string assertion = 3;
     string duration = 4;
     Result result = 5;
-    TestStatus status = 6;
+    ResultStatus status = 6;
 }
 
 message Response {
@@ -61,7 +79,7 @@ message Response {
 }
 
 service conformanceTesting{
-    rpc Info (google.protobuf.Empty) returns (controller.ControllerInfo);
-    rpc Health (google.protobuf.Empty) returns (controller.ControllerHealth);
+    rpc Info (google.protobuf.Empty) returns (ControllerInfo);
+    rpc Health (google.protobuf.Empty) returns (ControllerHealth);
     rpc RunTest (Request) returns (Response);
 }

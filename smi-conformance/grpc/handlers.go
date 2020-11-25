@@ -4,10 +4,9 @@ import (
 	"context"
 	"strconv"
 
+	empty "github.com/golang/protobuf/ptypes/empty"
 	"github.com/layer5io/learn-layer5/smi-conformance/proto"
 	test_gen "github.com/layer5io/learn-layer5/smi-conformance/test-gen"
-	common "github.com/layer5io/meshkit/protobuf/common"
-	controller "github.com/layer5io/meshkit/protobuf/controller"
 )
 
 var (
@@ -59,27 +58,40 @@ func (s *Service) RunTest(ctx context.Context, req *proto.Request) (*proto.Respo
 	details := make([]*proto.Detail, 0)
 	for _, res := range result.Testsuite[0].Testcase {
 		d := &proto.Detail{
-			Smispec:    res.Name,
-			Duration:   res.Time,
-			Assertions: strconv.Itoa(res.Assertions),
-			Status:     "Passing",
+			Smispec:   res.Name,
+			Duration:  res.Time,
+			Assertion: strconv.Itoa(res.Assertions),
+			Status:    proto.ResultStatus_PASSED,
+			Result: &proto.Result{
+				Result: &proto.Result_Message{
+					Message: "",
+				},
+			},
 		}
 		if len(res.Failure.Text) > 2 {
-			d.Result.Error = &common.CommonError{
-				ShortDescription: res.Failure.Text,
+			d.Result = &proto.Result{
+				Result: &proto.Result_Error{
+					Error: &proto.CommonError{
+						Code:                 "",
+						Severity:             "",
+						ShortDescription:     res.Failure.Text,
+						LongDescription:      res.Failure.Message,
+						ProbableCause:        "",
+						SuggestedRemediation: "",
+					},
+				},
 			}
-			d.Result.Message = res.Failure.Message
-			d.Status = "Failing"
+			d.Status = proto.ResultStatus_FAILED
 			failures += 1
 		}
 		details = append(details, d)
 	}
 
-	capability := "None"
+	capability := proto.Capability_NONE
 	if totalcases-failures > totalcases/2 {
-		capability = "Half"
+		capability = proto.Capability_HALF
 	} else if failures == 0 {
-		capability = "None"
+		capability = proto.Capability_FULL
 	}
 
 	return &proto.Response{
@@ -91,10 +103,10 @@ func (s *Service) RunTest(ctx context.Context, req *proto.Request) (*proto.Respo
 	}, nil
 }
 
-func (s *Service) Health(ctx context.Context) (*controller.ControllerHealth, error) {
-	return &controller.ControllerHealth{}, nil
+func (s *Service) Health(context.Context, *empty.Empty) (*proto.ControllerHealth, error) {
+	return &proto.ControllerHealth{}, nil
 }
 
-func (s *Service) Info(ctx context.Context) (*controller.ControllerInfo, error) {
-	return &controller.ControllerInfo{}, nil
+func (s *Service) Info(context.Context, *empty.Empty) (*proto.ControllerInfo, error) {
+	return &proto.ControllerInfo{}, nil
 }
