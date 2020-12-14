@@ -1,0 +1,77 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: meshery
+  namespace: meshery
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: smi-conformance
+  namespace: meshery
+subjects:
+- kind: ServiceAccount
+  name: meshery
+  namespace: meshery
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smi-conformance
+  namespace: meshery
+  labels:
+    app.kubernetes.io/name: smi-conformance
+spec:
+  type: NodePort
+  ports:
+    - port: 10011
+      targetPort: grpc
+      protocol: TCP
+      name: smi-conformance
+  selector:
+    app.kubernetes.io/name: smi-conformance
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smi-conformance
+  namespace: meshery
+  labels:
+    app.kubernetes.io/name: smi-conformance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: smi-conformance
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: smi-conformance
+    spec:
+      serviceAccountName: meshery
+      containers:
+        - name: smi-conformance
+          image: "layer5/learn-layer5:smi"
+          imagePullPolicy: Always
+          ports:
+            - name: grpc
+              containerPort: 10011
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1000Mi
+            requests:
+              cpu: 200m
+              memory: 500Mi
+      restartPolicy: Always
