@@ -1,31 +1,56 @@
 syntax = "proto3";
-package smi_conformance;
+import "google/protobuf/empty.proto";
+import "service-mesh-performance/protos/metadata.proto";
+import "service-mesh-performance/protos/service_mesh.proto";
 
+package smi_conformance;
 option go_package = "conformance;conformance";
 
-message Request {
-    string meshname = 1;
-    map<string, string> annotations = 2;
-    map<string, string> labels = 3;
-    string meshversion = 4;
+enum Capability {
+    FULL = 0;
+    HALF = 1;
+    NONE = 2;
 }
 
+enum TestStatus {
+    COMPLETED = 0;
+    INPROGRESS = 1;
+    CRASHED = 2;
+}
+
+enum ResultStatus {
+    PASSED = 0;
+    FAILED = 1;
+}
+
+message Request {
+    smp.ServiceMesh mesh = 1;
+}
+message Result {
+  oneof result {
+    string message = 1;
+    smp.CommonError error = 2;
+  }
+}
 message Detail {
     string smispec = 1;
-    string time = 2;
-    string assertions = 3;
-    string result = 4;
-    string reason = 5;
-    string capability = 6;
-    string status = 7;
+    string specversion = 2;
+    string assertion = 3;
+    string duration = 4;
+    Result result = 5;
+    TestStatus status = 6;
 }
 
 message Response {
-	string passpercent = 1;
+    string passpercent = 1;
     string casespassed = 2;
-    repeated Detail details = 3;
+    smp.ServiceMesh mesh = 3;
+    Capability capability = 4;
+    repeated Detail details = 5;
 }
 
 service conformanceTesting{
+    rpc Info (google.protobuf.Empty) returns (smp.ControllerInfo);
+    rpc Health (google.protobuf.Empty) returns (smp.ControllerHealth);
     rpc RunTest (Request) returns (Response);
 }
