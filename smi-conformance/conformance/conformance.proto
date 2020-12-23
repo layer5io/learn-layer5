@@ -1,6 +1,8 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
-import "service-mesh-performance/protos/metadata.proto";
+import "meshkit/protobuf/common/error.proto";
+import "meshkit/protobuf/controller/health.proto";
+import "meshkit/protobuf/controller/info.proto";
 import "service-mesh-performance/protos/service_mesh.proto";
 
 package smi_conformance;
@@ -29,7 +31,7 @@ message Request {
 message Result {
   oneof result {
     string message = 1;
-    smp.CommonError error = 2;
+    common.CommonError error = 2;
   }
 }
 message Detail {
@@ -50,7 +52,7 @@ message Response {
 }
 
 service conformanceTesting{
-    rpc Info (google.protobuf.Empty) returns (smp.ControllerInfo);
-    rpc Health (google.protobuf.Empty) returns (smp.ControllerHealth);
+    rpc Info (google.protobuf.Empty) returns (controller.ControllerInfo);
+    rpc Health (google.protobuf.Empty) returns (controller.ControllerHealth);
     rpc RunTest (Request) returns (Response);
 }
