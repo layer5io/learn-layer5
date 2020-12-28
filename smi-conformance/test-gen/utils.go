@@ -16,9 +16,9 @@ import (
 
 // App service names
 const (
-	SERVICE_A_NAME = "app-a"
-	SERVICE_B_NAME = "app-b"
-	SERVICE_C_NAME = "app-c"
+	SvcNameA = "app-a"
+	SvcNameB = "app-b"
+	SvcNameC = "app-c"
 )
 
 // App API endpoints
@@ -63,6 +63,7 @@ func GetHTTPClient() http.Client {
 	}
 }
 
+// ClearMetrics remove all the resources
 func ClearMetrics(hostname string, port string) error {
 	url := fmt.Sprintf("http://%s:%s/%s", hostname, port, METRICS)
 	httpClient := GetHTTPClient()
@@ -80,6 +81,7 @@ func ClearMetrics(hostname string, port string) error {
 	return nil
 }
 
+// GetMetrics return a type MetricResponse
 func GetMetrics(hostname string, port string) (*MetricResponse, error) {
 	url := fmt.Sprintf("http://%s:%s/%s", hostname, port, METRICS)
 	httpClient := GetHTTPClient()
@@ -91,6 +93,9 @@ func GetMetrics(hostname string, port string) (*MetricResponse, error) {
 		return nil, errors.New("Request failed")
 	}
 	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	metrics := MetricResponse{}
 	if err := json.Unmarshal(data, &metrics); err != nil {
@@ -109,8 +114,9 @@ func generatePOSTLoad(no int, url string, body []byte) error {
 	return nil
 }
 
+// ClearAllMetrics aggregate all the svc metrics
 func ClearAllMetrics(clusterIPs map[string]string, smObj ServiceMesh) {
-	ClearMetrics(clusterIPs[SERVICE_A_NAME], smObj.SvcAGetPort())
-	ClearMetrics(clusterIPs[SERVICE_B_NAME], smObj.SvcBGetPort())
-	ClearMetrics(clusterIPs[SERVICE_C_NAME], smObj.SvcCGetPort())
+	ClearMetrics(clusterIPs[SvcNameA], smObj.SvcAGetPort())
+	ClearMetrics(clusterIPs[SvcNameB], smObj.SvcBGetPort())
+	ClearMetrics(clusterIPs[SvcNameC], smObj.SvcCGetPort())
 }

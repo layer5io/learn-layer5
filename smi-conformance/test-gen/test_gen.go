@@ -104,8 +104,5 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 			time.Sleep(30 * time.Second)
 		})
 	}()
-	select {
-	case x := <-c:
-		return x
-	}
+	return <-c
 }
