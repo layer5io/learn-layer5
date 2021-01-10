@@ -21,7 +21,7 @@ The Learn Layer5 sample application is to be available for use across all servic
 - for [Service Mesh Interface conformance](https://docs.google.com/document/d/1HL8Sk7NSLLj-9PRqoHYVIGyU6fZxUQFotrxbmfFtjwc/edit#)
 
 ## Application Architecture
-The Learn Layer5 application includes three services: `app-a`, `app-b`, and `app-c`. Though they are different services, they are defines using the same app (source code in ./service). Each service is listening on port `9091/tcp`.
+The Learn Layer5 application includes three services: `app-a`, `app-b`, and `app-c`. Though they are different services, they are defined using the same app (source code in ./service). Each service is listening on port `9091/tcp`.
 
 ### Service
 
