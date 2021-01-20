@@ -32,6 +32,7 @@ var (
 	}
 )
 
+// RunTest return conformance response
 func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*conformance.Response, error) {
 	var config test_gen.ServiceMesh
 
@@ -68,7 +69,7 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 			d.Result = res.Failure.Message
 			d.Status = "Failing"
 			d.Capability = "None"
-			failures += 1
+			failures++
 			if (res.Assertions - failures) > (res.Assertions / 2) {
 				d.Capability = "Half"
 			}
