@@ -38,14 +38,17 @@ func (smi *SMIConformance) trafficPath(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err!=nil{
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	// call to SERVICE B metrics (allowed)
 	svcBTestURLMetrics := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), METRICS)
 	jsonStr := []byte(`{"url":"` + svcBTestURLMetrics + `", "body":"", "method": "GET", "headers": {}}`)
 
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
+	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SvcNameA], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
 	Logger.Logf("URL : \n", url)
@@ -60,7 +63,7 @@ func (smi *SMIConformance) trafficPath(
 	svcBTestURLEcho := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	jsonStr = []byte(`{"url":"` + svcBTestURLEcho + `", "body":"", "method": "GET", "headers": {}}`)
 
-	url = fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
+	url = fmt.Sprintf("http://%s:%s/%s", clusterIPs[SvcNameA], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
 	if err != nil {
@@ -68,7 +71,7 @@ func (smi *SMIConformance) trafficPath(
 		return []error{err}
 	}
 
-	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
+	metricsSvcA, err := GetMetrics(clusterIPs[SvcNameA], "9091")
 	if err != nil {
 		t.Fail()
 		Logger.Logf("Error : %s", err.Error())
@@ -116,14 +119,17 @@ func (smi *SMIConformance) trafficMethod(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err != nil {
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	// GET to echo (allowed)
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	jsonStr := []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "GET", "headers": {}}`)
 
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
+	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SvcNameA], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
 	Logger.Logf("URL : \n", url)
@@ -137,7 +143,7 @@ func (smi *SMIConformance) trafficMethod(
 	// POST to echo (blocked)
 	jsonStr = []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "POST", "headers": {}}`)
 
-	url = fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
+	url = fmt.Sprintf("http://%s:%s/%s", clusterIPs[SvcNameA], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
 	Logger.Logf("URL : \n", url)
@@ -148,7 +154,7 @@ func (smi *SMIConformance) trafficMethod(
 		return []error{err}
 	}
 
-	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
+	metricsSvcA, err := GetMetrics(clusterIPs[SvcNameA], "9091")
 	if err != nil {
 		t.Fail()
 		Logger.Logf("Error : %s", err.Error())

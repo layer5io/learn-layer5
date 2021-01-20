@@ -38,14 +38,17 @@ func (smi *SMIConformance) trafficBlocked(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err != nil {
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	// This test will make SERVICE A make a request to SERVICE B
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	var jsonStr = []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "GET", "headers": {}}`)
 
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
+	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SvcNameA], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
 	Logger.Logf("URL : \n", url)
@@ -56,7 +59,7 @@ func (smi *SMIConformance) trafficBlocked(
 		return []error{err}
 	}
 
-	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
+	metricsSvcA, err := GetMetrics(clusterIPs[SvcNameA], "9091")
 	if err != nil {
 		t.Fail()
 		Logger.Logf("Error : %s", err.Error())
@@ -100,14 +103,18 @@ func (smi *SMIConformance) trafficAllow(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err!=nil{
+		t.Fail()
+		Logger.Logf("Error : %s", err.Error())
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	// This test will make SERVICE A make a request to SERVICE B
 	svcBTestURL := fmt.Sprintf("%s/%s", smi.SMObj.SvcBGetInternalName(namespace), ECHO)
 	var jsonStr = []byte(`{"url":"` + svcBTestURL + `", "body":"", "method": "GET", "headers": {}}`)
 
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smi.SMObj.SvcAGetPort(), CALL)
+	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SvcNameA], smi.SMObj.SvcAGetPort(), CALL)
 	_, err = httpClient.Post(url, "application/json", bytes.NewBuffer(jsonStr))
 
 	Logger.Logf("URL : \n", url)
@@ -118,7 +125,7 @@ func (smi *SMIConformance) trafficAllow(
 		return []error{err}
 	}
 
-	metricsSvcA, err := GetMetrics(clusterIPs[SERVICE_A_NAME], "9091")
+	metricsSvcA, err := GetMetrics(clusterIPs[SvcNameA], "9091")
 
 	if err != nil {
 		t.Fail()
@@ -143,7 +150,7 @@ func (smi *SMIConformance) trafficAllow(
 	}
 	Logger.Log("Validated: Response destination")
 
-	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
+	metricsSvcB, err := GetMetrics(clusterIPs[SvcNameB], "9091")
 	if err != nil {
 		t.Fail()
 		Logger.Log("Error: ", err)

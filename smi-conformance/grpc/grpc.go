@@ -1,14 +1,12 @@
 package grpc
 
 import (
-	"errors"
 	"fmt"
 	"net"
 	"time"
 
 	middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
-
 	"google.golang.org/grpc"
 
 	"github.com/layer5io/learn-layer5/smi-conformance/conformance"
@@ -19,18 +17,17 @@ type Service struct {
 	Name      string    `json:"name"`
 	Port      string    `json:"port"`
 	Version   string    `json:"version"`
-	StartedAt time.Time `json:"startedat,string"`
+	StartedAt time.Time `json:"startedat"`
 }
 
 // panicHandler is the handler function to handle panic errors
 func panicHandler(r interface{}) error {
 	fmt.Println("500 panic Error")
-	return errors.New(fmt.Sprintf("Panic error for: %+v", r))
+	return fmt.Errorf("Panic error for: %+v", r)
 }
 
-// StartServer starts grpc server
+// Start grpc server
 func Start(s *Service) error {
-
 	address := fmt.Sprintf(":%s", s.Port)
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
@@ -55,5 +52,4 @@ func Start(s *Service) error {
 		return err
 	}
 	return nil
-
 }

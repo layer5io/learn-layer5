@@ -13,6 +13,7 @@ import (
 
 const reqNo = 50
 
+// TrafficSplitGetTests return type of map[string]test.CustomTest
 func (smi *SMIConformance) TrafficSplitGetTests() map[string]test.CustomTest {
 	testHandlers := make(map[string]test.CustomTest)
 
@@ -30,7 +31,7 @@ func trafficSplitTestScenario(clusterIPs map[string]string, namespace string, sm
 	svcTrafficSplit := fmt.Sprintf("http://app-svc.%s.svc.cluster.local.:9091/%s", namespace, ECHO)
 	jsonStr := []byte(`{"url":"` + svcTrafficSplit + `", "body":"", "method": "GET", "headers": {}}`)
 
-	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SERVICE_A_NAME], smObj.SvcAGetPort(), CALL)
+	url := fmt.Sprintf("http://%s:%s/%s", clusterIPs[SvcNameA], smObj.SvcAGetPort(), CALL)
 
 	return generatePOSTLoad(reqNo, url, jsonStr)
 }
@@ -50,7 +51,10 @@ func (smi *SMIConformance) trafficSplitDefault(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err != nil {
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
@@ -58,14 +62,14 @@ func (smi *SMIConformance) trafficSplitDefault(
 		return []error{err}
 	}
 
-	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
+	metricsSvcB, err := GetMetrics(clusterIPs[SvcNameB], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
 	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
-	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
+	metricsSvcC, err := GetMetrics(clusterIPs[SvcNameC], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
@@ -97,7 +101,10 @@ func (smi *SMIConformance) trafficSplitOnlyB(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err != nil {
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
@@ -105,14 +112,14 @@ func (smi *SMIConformance) trafficSplitOnlyB(
 		return []error{err}
 	}
 
-	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
+	metricsSvcB, err := GetMetrics(clusterIPs[SvcNameB], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
 	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
-	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
+	metricsSvcC, err := GetMetrics(clusterIPs[SvcNameC], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
@@ -144,7 +151,10 @@ func (smi *SMIConformance) trafficSplitOnlyC(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err != nil {
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
@@ -152,14 +162,14 @@ func (smi *SMIConformance) trafficSplitOnlyC(
 		return []error{err}
 	}
 
-	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
+	metricsSvcB, err := GetMetrics(clusterIPs[SvcNameB], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
 	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
-	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
+	metricsSvcC, err := GetMetrics(clusterIPs[SvcNameC], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
@@ -191,7 +201,10 @@ func (smi *SMIConformance) trafficSplitBGrtC(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err != nil {
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
@@ -199,14 +212,14 @@ func (smi *SMIConformance) trafficSplitBGrtC(
 		return []error{err}
 	}
 
-	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
+	metricsSvcB, err := GetMetrics(clusterIPs[SvcNameB], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
 	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
-	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
+	metricsSvcC, err := GetMetrics(clusterIPs[SvcNameC], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
@@ -238,7 +251,10 @@ func (smi *SMIConformance) trafficSplitCGrtB(
 		return []error{err}
 	}
 	clusterIPs, err := GetClusterIPs(kubeClient, namespace)
-
+	if err != nil {
+		t.Fail()
+		return []error{err}
+	}
 	ClearAllMetrics(clusterIPs, smi.SMObj)
 
 	if err = trafficSplitTestScenario(clusterIPs, namespace, smi.SMObj); err != nil {
@@ -246,14 +262,14 @@ func (smi *SMIConformance) trafficSplitCGrtB(
 		return []error{err}
 	}
 
-	metricsSvcB, err := GetMetrics(clusterIPs[SERVICE_B_NAME], "9091")
+	metricsSvcB, err := GetMetrics(clusterIPs[SvcNameB], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
 	}
 	Logger.Log("Service B : Requests Received", metricsSvcB.ReqReceived)
 
-	metricsSvcC, err := GetMetrics(clusterIPs[SERVICE_C_NAME], "9091")
+	metricsSvcC, err := GetMetrics(clusterIPs[SvcNameC], "9091")
 	if err != nil {
 		t.Fail()
 		return []error{err}
