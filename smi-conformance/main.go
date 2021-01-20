@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/layer5io/learn-layer5/smi-conformance/grpc"
 	"os"
-	"sigs.k8s.io/controller-runtime/pkg/log"
 	"time"
+
+	"github.com/layer5io/learn-layer5/smi-conformance/grpc"
+	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
 func main() {

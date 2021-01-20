@@ -1,8 +1,8 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
-import "meshkit/protobuf/common/error.proto";
-import "meshkit/protobuf/controller/health.proto";
-import "meshkit/protobuf/controller/info.proto";
+import "service-mesh-performance/common/error.proto";
+import "service-mesh-performance/controller/health.proto";
+import "service-mesh-performance/controller/info.proto";
 import "service-mesh-performance/protos/service_mesh.proto";
 
 package smi_conformance;
@@ -28,19 +28,21 @@ enum ResultStatus {
 message Request {
     smp.ServiceMesh mesh = 1;
 }
+
 message Result {
   oneof result {
     string message = 1;
     common.CommonError error = 2;
   }
 }
+
 message Detail {
     string smispec = 1;
     string specversion = 2;
     string assertion = 3;
     string duration = 4;
     Result result = 5;
-    TestStatus status = 6;
+    ResultStatus status = 6;
 }
 
 message Response {
