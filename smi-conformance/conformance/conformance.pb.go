@@ -7,11 +7,15 @@
 package conformance
 
 import (
+	context "context"
 	proto "github.com/golang/protobuf/proto"
 	empty "github.com/golang/protobuf/ptypes/empty"
 	common "github.com/layer5io/service-mesh-performance/common"
 	controller "github.com/layer5io/service-mesh-performance/controller"
 	spec "github.com/layer5io/service-mesh-performance/spec"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -679,4 +683,156 @@ func file_learn_layer5_smi_conformance_conformance_conformance_proto_init() {
 	file_learn_layer5_smi_conformance_conformance_conformance_proto_rawDesc = nil
 	file_learn_layer5_smi_conformance_conformance_conformance_proto_goTypes = nil
 	file_learn_layer5_smi_conformance_conformance_conformance_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// ConformanceTestingClient is the client API for ConformanceTesting service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ConformanceTestingClient interface {
+	Info(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*controller.ControllerInfo, error)
+	Health(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*controller.ControllerHealth, error)
+	RunTest(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+}
+
+type conformanceTestingClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewConformanceTestingClient(cc grpc.ClientConnInterface) ConformanceTestingClient {
+	return &conformanceTestingClient{cc}
+}
+
+func (c *conformanceTestingClient) Info(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*controller.ControllerInfo, error) {
+	out := new(controller.ControllerInfo)
+	err := c.cc.Invoke(ctx, "/smi_conformance.conformanceTesting/Info", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conformanceTestingClient) Health(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*controller.ControllerHealth, error) {
+	out := new(controller.ControllerHealth)
+	err := c.cc.Invoke(ctx, "/smi_conformance.conformanceTesting/Health", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conformanceTestingClient) RunTest(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/smi_conformance.conformanceTesting/RunTest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ConformanceTestingServer is the server API for ConformanceTesting service.
+type ConformanceTestingServer interface {
+	Info(context.Context, *empty.Empty) (*controller.ControllerInfo, error)
+	Health(context.Context, *empty.Empty) (*controller.ControllerHealth, error)
+	RunTest(context.Context, *Request) (*Response, error)
+}
+
+// UnimplementedConformanceTestingServer can be embedded to have forward compatible implementations.
+type UnimplementedConformanceTestingServer struct {
+}
+
+func (*UnimplementedConformanceTestingServer) Info(context.Context, *empty.Empty) (*controller.ControllerInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
+}
+func (*UnimplementedConformanceTestingServer) Health(context.Context, *empty.Empty) (*controller.ControllerHealth, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Health not implemented")
+}
+func (*UnimplementedConformanceTestingServer) RunTest(context.Context, *Request) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RunTest not implemented")
+}
+
+func RegisterConformanceTestingServer(s *grpc.Server, srv ConformanceTestingServer) {
+	s.RegisterService(&_ConformanceTesting_serviceDesc, srv)
+}
+
+func _ConformanceTesting_Info_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(empty.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConformanceTestingServer).Info(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/smi_conformance.conformanceTesting/Info",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConformanceTestingServer).Info(ctx, req.(*empty.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ConformanceTesting_Health_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(empty.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConformanceTestingServer).Health(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/smi_conformance.conformanceTesting/Health",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConformanceTestingServer).Health(ctx, req.(*empty.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ConformanceTesting_RunTest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConformanceTestingServer).RunTest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/smi_conformance.conformanceTesting/RunTest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConformanceTestingServer).RunTest(ctx, req.(*Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _ConformanceTesting_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "smi_conformance.conformanceTesting",
+	HandlerType: (*ConformanceTestingServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Info",
+			Handler:    _ConformanceTesting_Info_Handler,
+		},
+		{
+			MethodName: "Health",
+			Handler:    _ConformanceTesting_Health_Handler,
+		},
+		{
+			MethodName: "RunTest",
+			Handler:    _ConformanceTesting_RunTest_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "learn-layer5/smi-conformance/conformance/conformance.proto",
 }

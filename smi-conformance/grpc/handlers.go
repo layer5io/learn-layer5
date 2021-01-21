@@ -4,9 +4,11 @@ import (
 	"context"
 	"strconv"
 
+	empty "github.com/golang/protobuf/ptypes/empty"
 	"github.com/layer5io/learn-layer5/smi-conformance/conformance"
 	test_gen "github.com/layer5io/learn-layer5/smi-conformance/test-gen"
-	"github.com/layer5io/service-mesh-performance/common"
+	common "github.com/layer5io/service-mesh-performance/common"
+	controller "github.com/layer5io/service-mesh-performance/controller"
 	smp "github.com/layer5io/service-mesh-performance/spec"
 )
 
@@ -42,18 +44,19 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	switch req.Mesh.Type {
 	case smp.ServiceMesh_APP_MESH:
 		config = linkerdConfig
-		req.Annotations["linkerd.io/inject"] = "enabled"
+		req.Mesh.Annotations["linkerd.io/inject"] = "enabled"
 	case smp.ServiceMesh_MAESH:
 		config = maeshConfig
 	case smp.ServiceMesh_ISTIO:
 		config = istioConfig
-		req.Labels["istio-injection"] = "enabled"
+		req.Mesh.Labels["istio-injection"] = "enabled"
 	case smp.ServiceMesh_OPEN_SERVICE_MESH:
 		config = osmConfig
-		req.Labels["openservicemesh.io/monitored-by"] = "osm"
+		req.Mesh.Labels["openservicemesh.io/monitored-by"] = "osm"
+
 	}
 
-	result := test_gen.RunTest(config, req.Annotations, req.Labels)
+	result := test_gen.RunTest(config, req.Mesh.Annotations, req.Mesh.Labels)
 	totalcases := 3
 	failures := 0
 
@@ -108,4 +111,12 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 		Mesh:        req.Mesh,
 		Capability:  capability,
 	}, nil
+}
+
+func (s *Service) Info(context.Context, *empty.Empty) (*controller.ControllerInfo, error) {
+	return &controller.ControllerInfo{}, nil
+}
+
+func (s *Service) Health(context.Context, *empty.Empty) (*controller.ControllerHealth, error) {
+	return &controller.ControllerHealth{}, nil
 }

@@ -24,8 +24,8 @@ require (
 	google.golang.org/grpc v1.30.0
 	google.golang.org/protobuf v1.24.0
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
-	k8s.io/api v0.18.12
-	k8s.io/client-go v0.18.12
+	k8s.io/api v0.17.3
+	k8s.io/client-go v0.17.3
 	sigs.k8s.io/controller-runtime v0.5.1
 )
 
