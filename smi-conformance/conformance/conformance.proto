@@ -1,8 +1,8 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
-import "service-mesh-performance/common/error.proto";
-import "service-mesh-performance/controller/health.proto";
-import "service-mesh-performance/controller/info.proto";
+import "service-mesh-performance/service/error.proto";
+import "service-mesh-performance/service/health.proto";
+import "service-mesh-performance/service/info.proto";
 import "service-mesh-performance/protos/service_mesh.proto";
 
 package smi_conformance;
@@ -32,7 +32,7 @@ message Request {
 message Result {
   oneof result {
     string message = 1;
-    common.CommonError error = 2;
+    service.CommonError error = 2;
   }
 }
 
@@ -42,19 +42,19 @@ message Detail {
     string assertion = 3;
     string duration = 4;
     Result result = 5;
-    ResultStatus status = 6;
+    Capability capability = 6;
+    ResultStatus status = 7;
 }
 
 message Response {
     string passpercent = 1;
     string casespassed = 2;
     smp.ServiceMesh mesh = 3;
-    Capability capability = 4;
     repeated Detail details = 5;
 }
 
 service conformanceTesting{
-    rpc Info (google.protobuf.Empty) returns (controller.ControllerInfo);
-    rpc Health (google.protobuf.Empty) returns (controller.ControllerHealth);
+    rpc Info (google.protobuf.Empty) returns (service.ServiceInfo);
+    rpc Health (google.protobuf.Empty) returns (service.ServiceHealth);
     rpc RunTest (Request) returns (Response);
 }

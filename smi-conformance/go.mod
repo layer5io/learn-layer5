@@ -10,7 +10,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/kudobuilder/kuttl v0.0.0-00010101000000-000000000000
 	// github.com/layer5io/meshkit v0.2.0
-	github.com/layer5io/service-mesh-performance v0.3.2-0.20201223205038-515a2eee2ba1
+	github.com/layer5io/service-mesh-performance v0.3.1
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/onsi/ginkgo v1.14.1 // indirect
@@ -31,4 +31,4 @@ require (
 
 replace github.com/kudobuilder/kuttl => github.com/layer5io/kuttl v0.4.1-0.20200806180306-b7e46afd657f
 
-replace github.com/layer5io/service-mesh-performance v0.3.2-0.20201223205038-515a2eee2ba1 => github.com/dhruv0000/service-mesh-performance v0.3.2-0.20210120125240-fac7de77343c
+replace github.com/layer5io/service-mesh-performance v0.3.1 => github.com/dhruv0000/service-mesh-performance v0.3.2-0.20210121151842-880e0308edc5

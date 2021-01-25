@@ -7,8 +7,7 @@ import (
 	empty "github.com/golang/protobuf/ptypes/empty"
 	"github.com/layer5io/learn-layer5/smi-conformance/conformance"
 	test_gen "github.com/layer5io/learn-layer5/smi-conformance/test-gen"
-	common "github.com/layer5io/service-mesh-performance/common"
-	controller "github.com/layer5io/service-mesh-performance/controller"
+	service "github.com/layer5io/service-mesh-performance/service"
 	smp "github.com/layer5io/service-mesh-performance/spec"
 )
 
@@ -65,20 +64,20 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 		d := &conformance.Detail{
 			Smispec:     res.Name,
 			Specversion: "v1alpha1",
-			Duration:    res.Time,
 			Assertion:   strconv.Itoa(res.Assertions),
-			// Capability: conformance.Capability(conformance.Capability_FULL),
-			Status: conformance.ResultStatus(conformance.ResultStatus_PASSED),
+			Duration:    res.Time,
+			Capability:  conformance.Capability_FULL,
+			Status:      conformance.ResultStatus_PASSED,
 			Result: &conformance.Result{
 				Result: &conformance.Result_Message{
-					Message: "",
+					Message: "All test passed",
 				},
 			},
 		}
 		if len(res.Failure.Text) > 2 {
 			d.Result = &conformance.Result{
 				Result: &conformance.Result_Error{
-					Error: &common.CommonError{
+					Error: &service.CommonError{
 						Code:                 "",
 						Severity:             "",
 						ShortDescription:     res.Failure.Text,
@@ -88,35 +87,28 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 					},
 				},
 			}
-			d.Status = conformance.ResultStatus(conformance.ResultStatus_FAILED)
-			// d.Capability = "None"
+			d.Status = conformance.ResultStatus_FAILED
+			d.Capability = conformance.Capability_NONE
 			failures += 1
 			if (res.Assertions - failures) > (res.Assertions / 2) {
-				// d.Capability = "Half"
+				d.Capability = conformance.Capability_HALF
 			}
 		}
 		details = append(details, d)
-	}
-	capability := conformance.Capability_NONE
-	if totalcases-failures > totalcases/2 {
-		capability = conformance.Capability_HALF
-	} else if failures == 0 {
-		capability = conformance.Capability_FULL
 	}
 
 	return &conformance.Response{
 		Casespassed: strconv.Itoa(totalcases - failures),
 		Passpercent: strconv.Itoa(((totalcases - failures) / totalcases) * 100),
-		Details:     details,
 		Mesh:        req.Mesh,
-		Capability:  capability,
+		Details:     details,
 	}, nil
 }
 
-func (s *Service) Info(context.Context, *empty.Empty) (*controller.ControllerInfo, error) {
-	return &controller.ControllerInfo{}, nil
+func (s *Service) Info(context.Context, *empty.Empty) (*service.ServiceInfo, error) {
+	return &service.ServiceInfo{}, nil
 }
 
-func (s *Service) Health(context.Context, *empty.Empty) (*controller.ControllerHealth, error) {
-	return &controller.ControllerHealth{}, nil
+func (s *Service) Health(context.Context, *empty.Empty) (*service.ServiceHealth, error) {
+	return &service.ServiceHealth{}, nil
 }

@@ -4,7 +4,7 @@ labels:
   app: smi-conformance
   release: smi-conformance
 image:
-  repository: layer5/learn-layer5
+  repository: dhruv0000/learn-layer5
   tag: smi
   pullPolicy: Always
   port: 10011
