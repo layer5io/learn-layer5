@@ -99,7 +99,7 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 
 	return &conformance.Response{
 		Casespassed: strconv.Itoa(totalcases - failures),
-		Passpercent: strconv.Itoa(((totalcases - failures) / totalcases) * 100),
+		Passpercent: strconv.FormatFloat(((totalcases-failures)/totalcases)*100, 'f', 2, 32),
 		Mesh:        req.Mesh,
 		Details:     details,
 	}, nil
