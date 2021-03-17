@@ -61,7 +61,7 @@ spec:
       serviceAccountName: meshery
       containers:
         - name: smi-conformance
-          image: "dhruv0000/learn-layer5:smi"
+          image: "learn-layer5/learn-layer5:smi"
           imagePullPolicy: Always
           ports:
             - name: grpc
