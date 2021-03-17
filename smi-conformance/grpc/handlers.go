@@ -98,14 +98,16 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 
 			// A hacky way to see the testStep Failed, since KUDO only provides it in Failure.Message
 			re := regexp.MustCompile(`[0-9]+`)
-			stepFailed := re.FindAllString(res.Failure.Message, 1)
-			if len(stepFailed) != 0 {
-				passed, _ := strconv.Atoi(stepFailed[0])
-				passed = passed - 1
-				failures := stepsCount[res.Name] - passed
-				totalFailures += failures
-				if (passed) >= (stepsCount[res.Name] / 2) {
-					d.Capability = conformance.Capability_HALF
+			if res.Failure != nil {
+				stepFailed := re.FindAllString(res.Failure.Message, 1)
+				if len(stepFailed) != 0 {
+					passed, _ := strconv.Atoi(stepFailed[0])
+					passed = passed - 1
+					failures := stepsCount[res.Name] - passed
+					totalFailures += failures
+					if (passed) >= (stepsCount[res.Name] / 2) {
+						d.Capability = conformance.Capability_HALF
+					}
 				}
 			}
 		}
