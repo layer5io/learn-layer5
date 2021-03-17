@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"regexp"
 	"strconv"
 
 	empty "github.com/golang/protobuf/ptypes/empty"
@@ -56,15 +57,20 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	}
 
 	result := test_gen.RunTest(config, req.Mesh.Annotations, req.Mesh.Labels)
-	totalcases := 3
-	failures := 0
+	totalSteps := 24
+	totalFailures := 0
+	stepsCount := map[string]int{
+		"traffic-access": 7,
+		"traffic-split":  11,
+		"traffic-spec":   6,
+	}
 
 	details := make([]*conformance.Detail, 0)
 	for _, res := range result.Testsuite[0].Testcase {
 		d := &conformance.Detail{
 			Smispec:     res.Name,
 			Specversion: "v1alpha1",
-			Assertion:   strconv.Itoa(res.Assertions),
+			Assertion:   strconv.Itoa(stepsCount[res.Name]),
 			Duration:    res.Time,
 			Capability:  conformance.Capability_FULL,
 			Status:      conformance.ResultStatus_PASSED,
@@ -89,17 +95,28 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 			}
 			d.Status = conformance.ResultStatus_FAILED
 			d.Capability = conformance.Capability_NONE
-			failures += 1
-			if (res.Assertions - failures) > (res.Assertions / 2) {
-				d.Capability = conformance.Capability_HALF
+
+			// A hacky way to see the testStep Failed, since KUDO only provides it in Failure.Message
+			re := regexp.MustCompile(`[0-9]+`)
+			if res.Failure != nil {
+				stepFailed := re.FindAllString(res.Failure.Message, 1)
+				if len(stepFailed) != 0 {
+					passed, _ := strconv.Atoi(stepFailed[0])
+					passed = passed - 1
+					failures := stepsCount[res.Name] - passed
+					totalFailures += failures
+					if (passed) >= (stepsCount[res.Name] / 2) {
+						d.Capability = conformance.Capability_HALF
+					}
+				}
 			}
 		}
 		details = append(details, d)
 	}
 
 	return &conformance.Response{
-		Casespassed: strconv.Itoa(totalcases - failures),
-		Passpercent: strconv.Itoa(((totalcases - failures) / totalcases) * 100),
+		Casespassed: strconv.Itoa(totalSteps - totalFailures),
+		Passpercent: strconv.FormatFloat(float64(totalSteps-totalFailures)/float64(totalSteps)*100, 'f', 2, 64),
 		Mesh:        req.Mesh,
 		Details:     details,
 	}, nil
