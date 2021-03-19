@@ -42,9 +42,12 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 
 	config = linkerdConfig
 	switch req.Mesh.Type {
-	case smp.ServiceMesh_APP_MESH:
+	case smp.ServiceMesh_LINKERD:
 		config = linkerdConfig
 		req.Mesh.Annotations["linkerd.io/inject"] = "enabled"
+	case smp.ServiceMesh_APP_MESH:
+		config = linkerdConfig
+		req.Mesh.Labels["appmesh.k8s.aws/sidecarInjectorWebhook"] = "enabled"
 	case smp.ServiceMesh_MAESH:
 		config = maeshConfig
 	case smp.ServiceMesh_ISTIO:
@@ -53,6 +56,10 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	case smp.ServiceMesh_OPEN_SERVICE_MESH:
 		config = osmConfig
 		req.Mesh.Labels["openservicemesh.io/monitored-by"] = "osm"
+	case smp.ServiceMesh_KUMA:
+		req.Mesh.Annotations["kuma.io/sidecar-injection"] = "enabled"
+	case smp.ServiceMesh_NGINX_SERVICE_MESH:
+		req.Mesh.Annotations["njector.nsm.nginx.com/auto-inject"] = "true"
 
 	}
 
