@@ -71,12 +71,17 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 		"traffic-split":  11,
 		"traffic-spec":   6,
 	}
+	specVersion := map[string]string{
+		"traffic-access": "v0.6.0/v1alpha3",
+		"traffic-split":  "v0.6.0/v1alpha4",
+		"traffic-spec":   "v0.6.0/v1alpha4",
+	}
 
 	details := make([]*conformance.Detail, 0)
 	for _, res := range result.Testsuite[0].Testcase {
 		d := &conformance.Detail{
 			Smispec:     res.Name,
-			Specversion: "v1alpha1",
+			Specversion: specVersion[res.Name],
 			Assertion:   strconv.Itoa(stepsCount[res.Name]),
 			Duration:    res.Time,
 			Capability:  conformance.Capability_FULL,

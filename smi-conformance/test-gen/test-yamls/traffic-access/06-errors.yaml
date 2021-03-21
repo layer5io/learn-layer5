@@ -1,23 +1,27 @@
 ---
-apiVersion: specs.smi-spec.io/v1alpha1
+apiVersion: specs.smi-spec.io/v1alpha4
 kind: TCPRoute
 metadata:
   name: service-tcp-route
   namespace: <NAMESPACE>
+spec:
+  matches:
+    ports: []
 ---
-apiVersion: access.smi-spec.io/v1alpha1
+apiVersion: access.smi-spec.io/v1alpha3
 kind: TrafficTarget
 metadata:
   name: service-targets
   namespace: <NAMESPACE>
-destination:
-  kind: ServiceAccount
-  name: service-b
-  namespace: <NAMESPACE>
-sources:
-- kind: ServiceAccount
-  name: service-a
-  namespace: <NAMESPACE>
-specs:
-- kind: TCPRoute
-  name: service-tcp-route
+spec:
+  destination:
+    kind: ServiceAccount
+    name: service-b
+    namespace: <NAMESPACE>
+  sources:
+  - kind: ServiceAccount
+    name: service-a
+    namespace: <NAMESPACE>
+  rules:
+  - kind: TCPRoute
+    name: service-tcp-route

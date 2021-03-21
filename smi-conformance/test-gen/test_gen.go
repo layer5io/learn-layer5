@@ -55,7 +55,7 @@ func RunTest(meshConfig ServiceMesh, annotations, labels map[string]string) Resu
 		args := []string{"./test-yamls/"}
 
 		options.TestDirs = args
-		options.Timeout = 120
+		options.Timeout = 180
 		options.Parallel = 1
 		options.TestDirs = manifestDirs
 		options.StartKIND = false

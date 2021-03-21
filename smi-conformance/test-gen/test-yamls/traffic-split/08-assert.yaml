@@ -1,4 +1,4 @@
-apiVersion: split.smi-spec.io/v1alpha1
+apiVersion: split.smi-spec.io/v1alpha4
 kind: TrafficSplit
 metadata:
   name: server-split
