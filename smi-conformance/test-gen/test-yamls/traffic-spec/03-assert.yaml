@@ -13,7 +13,7 @@ kind: TrafficTarget
 metadata:
   name: service-targets
   namespace: <NAMESPACE>
-rules:
+spec:
   destination:
     kind: ServiceAccount
     name: service-b
@@ -23,7 +23,7 @@ rules:
   - kind: ServiceAccount
     name: service-a
     namespace: <NAMESPACE>
-  specs:
+  rules:
   - kind: HTTPRouteGroup
     name: http-rg
     matches:
