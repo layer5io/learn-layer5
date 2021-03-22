@@ -42,9 +42,12 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 
 	config = linkerdConfig
 	switch req.Mesh.Type {
-	case smp.ServiceMesh_APP_MESH:
+	case smp.ServiceMesh_LINKERD:
 		config = linkerdConfig
 		req.Mesh.Annotations["linkerd.io/inject"] = "enabled"
+	case smp.ServiceMesh_APP_MESH:
+		config = linkerdConfig
+		req.Mesh.Labels["appmesh.k8s.aws/sidecarInjectorWebhook"] = "enabled"
 	case smp.ServiceMesh_MAESH:
 		config = maeshConfig
 	case smp.ServiceMesh_ISTIO:
@@ -53,6 +56,10 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 	case smp.ServiceMesh_OPEN_SERVICE_MESH:
 		config = osmConfig
 		req.Mesh.Labels["openservicemesh.io/monitored-by"] = "osm"
+	case smp.ServiceMesh_KUMA:
+		req.Mesh.Annotations["kuma.io/sidecar-injection"] = "enabled"
+	case smp.ServiceMesh_NGINX_SERVICE_MESH:
+		req.Mesh.Annotations["njector.nsm.nginx.com/auto-inject"] = "true"
 
 	}
 
@@ -64,12 +71,17 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 		"traffic-split":  11,
 		"traffic-spec":   6,
 	}
+	specVersion := map[string]string{
+		"traffic-access": "v0.6.0/v1alpha3",
+		"traffic-split":  "v0.6.0/v1alpha4",
+		"traffic-spec":   "v0.6.0/v1alpha4",
+	}
 
 	details := make([]*conformance.Detail, 0)
 	for _, res := range result.Testsuite[0].Testcase {
 		d := &conformance.Detail{
 			Smispec:     res.Name,
-			Specversion: "v1alpha1",
+			Specversion: specVersion[res.Name],
 			Assertion:   strconv.Itoa(stepsCount[res.Name]),
 			Duration:    res.Time,
 			Capability:  conformance.Capability_FULL,
@@ -98,7 +110,7 @@ func (s *Service) RunTest(ctx context.Context, req *conformance.Request) (*confo
 
 			// A hacky way to see the testStep Failed, since KUDO only provides it in Failure.Message
 			re := regexp.MustCompile(`[0-9]+`)
-			if res.Failure != nil {
+			if res.Failure.Message != "" {
 				stepFailed := re.FindAllString(res.Failure.Message, 1)
 				if len(stepFailed) != 0 {
 					passed, _ := strconv.Atoi(stepFailed[0])

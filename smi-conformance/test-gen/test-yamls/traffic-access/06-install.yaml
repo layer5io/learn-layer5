@@ -1,11 +1,11 @@
 apiVersion: kudo.dev/v1alpha1
 kind: TestStep
 delete:
-- apiVersion: specs.smi-spec.io/v1alpha1
+- apiVersion: specs.smi-spec.io/v1alpha4
   kind: TCPRoute
   namespace: <NAMESPACE>
   name: service-tcp-route
-- apiVersion: access.smi-spec.io/v1alpha1
+- apiVersion: access.smi-spec.io/v1alpha3
   kind: TrafficTarget
   namespace: <NAMESPACE>
   name: service-targets
