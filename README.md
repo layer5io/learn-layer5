@@ -2,13 +2,13 @@
   <img align="center" src="https://raw.githubusercontent.com/layer5io/layer5/master/.github/assets/images/layer5/layer5-tag-white-bg.png" width="45%" /></p>
 
 ![GitHub contributors](https://img.shields.io/github/contributors/layer5io/layer5.svg)
-![GitHub](https://img.shields.io/github/license/layer5io/layer5.svg) 
+![GitHub](https://img.shields.io/github/license/layer5io/layer5.svg)
 [![Docker Pulls](https://img.shields.io/docker/pulls/layer5/learn-layer5.svg)](https://hub.docker.com/r/layer5/learn-layer5)
 [![Go Report Card](https://goreportcard.com/badge/github.com/layer5io/learn-layer5)](https://goreportcard.com/report/github.com/layer5io/learn-layer5)
 [![GitHub issues by-label](https://img.shields.io/github/issues/layer5io/learn-layer5/help%20wanted.svg)](https://github.com/issues?utf8=✓&q=is%3Aopen+is%3Aissue+archived%3Afalse+org%3Alayer5io+label%3A%22help+wanted%22+")
 [![Website](https://img.shields.io/website/https/layer5.io/meshery.svg)](https://layer5.io)
 [![Twitter Follow](https://img.shields.io/twitter/follow/layer5.svg?label=Follow&style=social)](https://twitter.com/intent/follow?screen_name=mesheryio)
-[![Slack](http://slack.layer5.io/badge.svg)](http://slack.layer5.io)
+[![Slack](https://img.shields.io/badge/Slack-@layer5.svg?logo=slack)](http://slack.layer5.io)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3564/badge)](https://bestpractices.coreinfrastructure.org/projects/3564)
 
 <p style="clear:both;">
@@ -95,7 +95,7 @@ curl --location --request GET 'http://service-b:9091/metrics'
     "RespFailed": []
 }
 ```
-* In ReqReceived we see list of requests `service-b` received and from whom it received. Here we see `service-A`. Actually each of the service sets a header `ServiceName` which is read  by the service to determine the sender. 
+* In ReqReceived we see list of requests `service-b` received and from whom it received. Here we see `service-A`. Actually each of the service sets a header `ServiceName` which is read  by the service to determine the sender.
 * As `service-b` made a request to `service-c` and the request succeeded, we can see the details in the list of successful responses (RespSucceeded).
 
 #### DELETE /metrics
@@ -115,7 +115,7 @@ The `learn-layer5` application serves as a sample application to validate the co
 ## Invoking conformance tests
 
 **As a Service Mesh user**
-Meshery allows you to schedule tests and invoke them programmatically. Meshery will store these test results and allow you to retrieve them later. 
+Meshery allows you to schedule tests and invoke them programmatically. Meshery will store these test results and allow you to retrieve them later.
 
 **As a Service Mesh maker**
 Meshery guarantees provenance of these tests and facilitates the public publicing of this suite of tests results into a versioned, public matrix of conformance status (consisting of both supported capabilities and test compliance).
