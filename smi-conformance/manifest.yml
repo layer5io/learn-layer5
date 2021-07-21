@@ -38,7 +38,7 @@ spec:
       labels:
         app.kubernetes.io/name: smi-conformance
     spec:
-      serviceAccountName: meshery-server
+      serviceAccountName: meshery-operator
       containers:
         - name: smi-conformance
           image: "layer5/learn-layer5:smi"
