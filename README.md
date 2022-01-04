@@ -53,7 +53,7 @@ Accept-Encoding: gzip
 Servicename: Service-B
 ```
 
-In the above example, we are making a post request from `service-a` with the body:
+In the above example, we are making a post request to `service-a` with the body:
 ```json
 {
   "url": "http://service-b:9091/call",
