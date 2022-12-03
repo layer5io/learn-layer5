@@ -1,5 +1,10 @@
 <p style="text-align:center;" align="center">
-  <img align="center" src="https://raw.githubusercontent.com/layer5io/layer5/master/.github/assets/images/layer5/layer5-tag-white-bg.png" width="45%" /></p>
+      <picture align="center">
+         <source media="(prefers-color-scheme: dark)" srcset="img\readme\layer5-light-no-trim.svg">
+         <source media="(prefers-color-scheme: light)" srcset="img\readme\layer5-no-trim.svg">
+         <img align="center" src="img\readme\layer5-light-no-trim.svg" alt="Shows a dark layer5 logo in light mode and a white logo in dark mode" width="45%"/>
+      </picture>
+</p>
 
 ![GitHub contributors](https://img.shields.io/github/contributors/layer5io/layer5.svg)
 ![GitHub](https://img.shields.io/github/license/layer5io/layer5.svg)
