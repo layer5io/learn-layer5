@@ -6,15 +6,26 @@
       </picture>
 </p>
 
-![GitHub contributors](https://img.shields.io/github/contributors/layer5io/layer5.svg)
-![GitHub](https://img.shields.io/github/license/layer5io/layer5.svg)
-[![Docker Pulls](https://img.shields.io/docker/pulls/layer5/learn-layer5.svg)](https://hub.docker.com/r/layer5/learn-layer5)
-[![Go Report Card](https://goreportcard.com/badge/github.com/layer5io/learn-layer5)](https://goreportcard.com/report/github.com/layer5io/learn-layer5)
-[![GitHub issues by-label](https://img.shields.io/github/issues/layer5io/learn-layer5/help%20wanted.svg)](https://github.com/issues?utf8=✓&q=is%3Aopen+is%3Aissue+archived%3Afalse+org%3Alayer5io+label%3A%22help+wanted%22+")
-[![Website](https://img.shields.io/website/https/layer5.io/meshery.svg)](https://layer5.io)
-[![Twitter Follow](https://img.shields.io/twitter/follow/layer5.svg?label=Follow&style=social)](https://twitter.com/intent/follow?screen_name=mesheryio)
-[![Slack](https://img.shields.io/badge/Slack-@layer5.svg?logo=slack)](http://slack.layer5.io)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3564/badge)](https://bestpractices.coreinfrastructure.org/projects/3564)
+<p align="center">
+<a href="https://github.com/layer5io/layer5/graphs/contributors" style="display:inline-block; text-decoration:none;">
+<img src="https://img.shields.io/github/contributors/layer5io/layer5.svg" alt="GitHub contributors" /></a>
+<a href="https://github.com/layer5io/learn-layer5/blob/master/LICENSE" style="display:inline-block; text-decoration:none;">
+<img src="https://img.shields.io/github/license/layer5io/layer5.svg" alt="License" /></a>
+<a href="https://hub.docker.com/r/layer5/learn-layer5" style="display:inline-block; text-decoration:none;">
+<img src="https://img.shields.io/docker/pulls/layer5/learn-layer5.svg" alt="Docker Pulls" /></a>
+<a href="https://goreportcard.com/report/github.com/layer5io/learn-layer5" style="display:inline-block; text-decoration:none;">
+<img src="https://goreportcard.com/badge/github.com/layer5io/learn-layer5" alt="Go Report Card" /></a>
+<a href="https://github.com/issues?utf8=✓&q=is%3Aopen+is%3Aissue+archived%3Afalse+org%3Alayer5io+label%3A%22help+wanted%22" style="display:inline-block; text-decoration:none;">
+<img src="https://img.shields.io/github/issues/layer5io/learn-layer5/help%20wanted.svg" alt="Help wanted issues" /></a>
+<a href="https://layer5.io" style="display:inline-block; text-decoration:none;">
+<img src="https://img.shields.io/website/https/layer5.io/meshery.svg" alt="Website" /></a>
+<a href="https://twitter.com/intent/follow?screen_name=mesheryio" style="display:inline-block; text-decoration:none;">
+<img src="https://img.shields.io/twitter/follow/layer5.svg?label=Follow&style=social" alt="Twitter Follow" /></a>
+<a href="http://slack.layer5.io" style="display:inline-block; text-decoration:none;">
+<img src="https://img.shields.io/badge/Slack-@layer5.svg?logo=slack" alt="Slack" /></a>
+<a href="https://bestpractices.coreinfrastructure.org/projects/3564" style="display:inline-block; text-decoration:none;">
+<img src="https://bestpractices.coreinfrastructure.org/projects/3564/badge" alt="CII Best Practices" /></a>
+</p>
 
 <p style="clear:both;">
 
@@ -149,7 +160,7 @@ kubectl kuttl test  --skip-cluster-delete=true --start-kind=false ./smi-test
 
 <p style="clear:both;">
 <h2><a name="contributing"></a><a name="community"></a> <a href="http://slack.layer5.io">Community</a> and <a href="https://github.com/layer5io/layer5/blob/master/CONTRIBUTING.md">Contributing</a></h2>
-Our projects are community-built and welcome collaboration. 👍 Be sure to see the <a href="https://docs.google.com/document/d/17OPtDE_rdnPQxmk2Kauhm3GwXF1R5dZ3Cj8qZLKdo5E/edit">Layer5 Community Welcome Guide</a> for a tour of resources available to you and jump into our <a href="http://slack.layer5.io">Slack</a>! Contributors are expected to adhere to the <a href="https://github.com/cncf/foundation/blob/master/code-of-conduct.md">CNCF Code of Conduct</a>.
+Our projects are community-built and welcome collaboration. 👍 Be sure to see the <a href="https://layer5.io/community/newcomers">Layer5 Community Welcome Guide</a> for a tour of resources available to you and jump into our <a href="http://slack.layer5.io">Slack</a>! Contributors are expected to adhere to the <a href="https://github.com/cncf/foundation/blob/master/code-of-conduct.md">CNCF Code of Conduct</a>.
 
 <a href="https://slack.meshery.io">
 
